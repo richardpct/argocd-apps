@@ -6,4 +6,4 @@ version: 0.1.0
 appVersion: "0.1.0"
 dependencies:
   - name: metrics-server
-    repository: https://github.com/kubernetes-sigs/metrics-server
+    repository: https://kubernetes-sigs.github.io/metrics-server
