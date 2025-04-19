@@ -2,3 +2,4 @@
 metrics-server:
   args:
     - '--kubelet-insecure-tls=true'
+  replicas: 3
