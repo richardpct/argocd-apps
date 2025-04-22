@@ -1,0 +1,4 @@
+---
+vault:
+  dev:
+    enabled: true
