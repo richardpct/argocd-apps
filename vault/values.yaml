@@ -2,5 +2,5 @@
 vault:
   dev:
     enabled: true
-  standalone:
+  dataStorage:
     enabled: false
