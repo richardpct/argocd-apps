@@ -2,3 +2,5 @@
 vault:
   dev:
     enabled: true
+  standalone:
+    enabled: false
