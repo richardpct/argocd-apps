@@ -2,5 +2,6 @@
 vault:
   dev:
     enabled: true
-  dataStorage:
-    enabled: false
+  server:
+    dataStorage:
+      enabled: false
