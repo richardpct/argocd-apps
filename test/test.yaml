@@ -6,4 +6,4 @@ metadata:
     avp.kubernetes.io/path: "secret/data/ceph"
 type: Opaque
 data:
-  password: PGNsdXN0ZXJpZD4=
+  password: <clusterid>
