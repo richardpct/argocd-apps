@@ -5,6 +5,6 @@ type: application
 version: 5.8.47
 appVersion: 2.504.1
 dependencies:
-  - name: jenkinsci
+  - name: jenkinsci/jenkins
     repository: https://charts.jenkins.io
     version: 5.8.47
