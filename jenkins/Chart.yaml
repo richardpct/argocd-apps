@@ -7,3 +7,4 @@ appVersion: 2.504.1
 dependencies:
   - name: jenkinsci
     repository: https://charts.jenkins.io
+    version: 5.8.47
