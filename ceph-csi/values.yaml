@@ -287,7 +287,7 @@ ceph-csi-cephfs:
     # Should be unique across all Ceph clusters in use for provisioning,
     # cannot be greater than 36 bytes in length, and should remain immutable for
     # the lifetime of the StorageClass in use.
-    clusterID: 05b67c0f-3259-446e-ab05-5be32b85ac78
+    clusterID: d4e29dd1-9269-4510-b874-a12bd39c7194
     # (required) CephFS filesystem name into which the volume shall be created
     # eg: fsName: myfs
     fsName: cephfs
