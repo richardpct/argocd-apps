@@ -6,9 +6,9 @@ ceph-csi-cephfs:
   csiConfig:
     - clusterID: <path:secret/data/ceph#clusterid>
       monitors:
-        - "192.168.1.15"
-        - "192.168.1.38"
-        - "192.168.1.39"
+        - "192.168.1.20"
+        - "192.168.1.21"
+        - "192.168.1.22"
       cephFS:
         subvolumeGroup: "kubernetes"
   #      netNamespaceFilePath: "{{ .kubeletDir }}/plugins/{{ .driverName }}/net"
