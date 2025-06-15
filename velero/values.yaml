@@ -360,13 +360,13 @@ velero:
       # bucket is the name of the bucket to store backups in. Required.
       bucket: mybucket
       # caCert defines a base64 encoded CA bundle to use when verifying TLS connections to the provider. Optional.
-      caCert:
+      #caCert:
       # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
-      prefix:
+      #prefix:
       # default indicates this location is the default backup storage location. Optional.
       default: false
       # validationFrequency defines how frequently Velero should validate the object storage. Optional.
-      validationFrequency:
+      #validationFrequency:
       # accessMode determines if velero can write to this backup storage location. Optional.
       # default to ReadWrite, ReadOnly is used during migrations and restores.
       accessMode: ReadWrite
@@ -709,7 +709,7 @@ velero:
   schedules:
     jenkins:
       disabled: false
-      schedule: "55 18 * * *"
+      schedule: "37 21 * * *"
       useOwnerReferencesInBackup: false
       paused: false
       skipImmediately: false
