@@ -709,7 +709,7 @@ velero:
   schedules:
     jenkins:
       disabled: false
-      schedule: "10 16 * * *"
+      schedule: "31 18 * * *"
       useOwnerReferencesInBackup: false
       paused: false
       skipImmediately: false
