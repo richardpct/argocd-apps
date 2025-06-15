@@ -378,8 +378,8 @@ velero:
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
       config:
-      #  region:
-      #  s3ForcePathStyle:
+        region: minio
+        s3ForcePathStyle: true
         s3Url: https://minio.minio-tenant.svc
       #  kmsKeyId:
       #  resourceGroup:
@@ -411,8 +411,8 @@ velero:
         key: awsaccess
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
-      config: {}
-    #    region:
+      config:
+        region: minio
     #    apiTimeout:
     #    resourceGroup:
     #    The ID of the subscription where volume snapshots should be stored, if different from the cluster’s subscription. If specified, also requires `configuration.volumeSnapshotLocation.config.resourceGroup`to be set. (Azure only)
