@@ -372,9 +372,9 @@ velero:
       accessMode: ReadWrite
       credential:
         # name of the secret used by this backupStorageLocation.
-        name: minio
+        name: minio-secret
         # name of key that contains the secret data to be used.
-        key: minio123
+        key: awsaccess
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
       config:
@@ -406,9 +406,9 @@ velero:
       provider: aws
       credential:
         # name of the secret used by this volumeSnapshotLocation.
-        name: minio
+        name: minio-secret
         # name of key that contains the secret data to be used.
-        key: minio123
+        key: awsaccess
       # Additional provider-specific configuration. See link above
       # for details of required/optional fields for your provider.
       config: {}
