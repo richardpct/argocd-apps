@@ -380,7 +380,8 @@ velero:
       config:
         region: minio
         s3ForcePathStyle: true
-        s3Url: https://minio.minio-tenant.svc
+        #s3Url: https://minio.minio-tenant.svc
+        s3Url: https://10.99.177.234
       #  kmsKeyId:
       #  resourceGroup:
       #  The ID of the subscription containing the storage account, if different from the cluster’s subscription. (Azure only)
@@ -709,7 +710,7 @@ velero:
   schedules:
     jenkins:
       disabled: false
-      schedule: "37 21 * * *"
+      schedule: "54 21 * * *"
       useOwnerReferencesInBackup: false
       paused: false
       skipImmediately: false
