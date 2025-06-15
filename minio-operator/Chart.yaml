@@ -5,6 +5,6 @@ type: application
 version: 7.1.1
 appVersion: v7.1.1
 dependencies:
-  - name: minio/operator
+  - name: minio-operator/operator
     repository: https://operator.min.io
     version: 7.1.1
