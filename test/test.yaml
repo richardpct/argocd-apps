@@ -6,4 +6,5 @@ metadata:
 #    avp.kubernetes.io/path: "secret/data/ceph"
 type: Opaque
 data:
-  password: PHBhdGg6c2VjcmV0L2RhdGEvY2VwaCNjbHVzdGVyaWQ+
+#  password: PHBhdGg6c2VjcmV0L2RhdGEvY2VwaCNjbHVzdGVyaWQ+
+  toto: dG90bwo=
