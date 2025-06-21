@@ -1,10 +1,15 @@
 apiVersion: v1
-kind: Secret
+kind: Namespace
 metadata:
-  name: my-secret
-#  annotations:
-#    avp.kubernetes.io/path: "secret/data/ceph"
-type: Opaque
-data:
-#  password: PHBhdGg6c2VjcmV0L2RhdGEvY2VwaCNjbHVzdGVyaWQ+
-  toto: dG90bwo=
+  name: test
+
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: my-secret
+##  annotations:
+##    avp.kubernetes.io/path: "secret/data/ceph"
+#type: Opaque
+#data:
+##  password: PHBhdGg6c2VjcmV0L2RhdGEvY2VwaCNjbHVzdGVyaWQ+
+#  toto: dG90bwo=
