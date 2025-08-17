@@ -233,12 +233,12 @@ ceph-csi-cephfs:
     snapshotter:
       image:
         repository: registry.k8s.io/sig-storage/csi-snapshotter
-        tag: v8.3.0
+        tag: v8.2.0
         pullPolicy: IfNotPresent
       resources: {}
       args:
         # enableVolumeGroupSnapshots enables support for volume group snapshots
-        enableVolumeGroupSnapshots: false
+        # enableVolumeGroupSnapshots: false
         # httpEndpointPort specifies the http server port for
         # diagnostics, health checks and metrics.
         # Uncomment below line to enable the `http-endpoint` arg for sidecar
