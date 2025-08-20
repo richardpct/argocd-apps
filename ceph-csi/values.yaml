@@ -100,7 +100,7 @@ ceph-csi-cephfs:
     registrar:
       image:
         repository: registry.k8s.io/sig-storage/csi-node-driver-registrar
-        tag: v2.13.0
+        tag: v2.11.1
         pullPolicy: IfNotPresent
       resources: {}
 
@@ -198,7 +198,7 @@ ceph-csi-cephfs:
     provisioner:
       image:
         repository: registry.k8s.io/sig-storage/csi-provisioner
-        tag: v5.1.0
+        tag: v5.0.1
         pullPolicy: IfNotPresent
       resources: {}
       args:
@@ -218,7 +218,7 @@ ceph-csi-cephfs:
       enabled: true
       image:
         repository: registry.k8s.io/sig-storage/csi-resizer
-        tag: v1.13.1
+        tag: v1.11.1
         pullPolicy: IfNotPresent
       resources: {}
       args:
