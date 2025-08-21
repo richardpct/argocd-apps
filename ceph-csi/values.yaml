@@ -1,5 +1,14 @@
 ---
 ceph-csi-cephfs:
+  rbac:
+    create: true
+    leastPrivileges: true
+  serviceAccounts:
+    nodeplugin:
+      create: true
+    provisioner:
+      create: true
+
   # Configuration for the CSI to connect to the cluster
   # Ref: https://github.com/ceph/ceph-csi/blob/devel/examples/README.md
   # Example:
