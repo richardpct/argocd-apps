@@ -1,14 +1,5 @@
 ---
 ceph-csi-cephfs:
-  rbac:
-    create: true
-    leastPrivileges: true
-  serviceAccounts:
-    nodeplugin:
-      create: true
-    provisioner:
-      create: true
-
   # Configuration for the CSI to connect to the cluster
   # Ref: https://github.com/ceph/ceph-csi/blob/devel/examples/README.md
   # Example:
@@ -109,7 +100,7 @@ ceph-csi-cephfs:
     registrar:
       image:
         repository: registry.k8s.io/sig-storage/csi-node-driver-registrar
-        tag: v2.13.0
+        tag: v2.11.1
         pullPolicy: IfNotPresent
       resources: {}
 
@@ -207,7 +198,7 @@ ceph-csi-cephfs:
     provisioner:
       image:
         repository: registry.k8s.io/sig-storage/csi-provisioner
-        tag: v5.1.0
+        tag: v5.0.1
         pullPolicy: IfNotPresent
       resources: {}
       args:
@@ -222,29 +213,12 @@ ceph-csi-cephfs:
     # set metadata on volume
     setmetadata: true
 
-    attacher:
-      name: attacher
-      enabled: true
-      image:
-        repository: registry.k8s.io/sig-storage/csi-attacher
-        tag: v4.8.0
-        pullPolicy: IfNotPresent
-      resources: {}
-      args:
-      #   # httpEndpointPort specifies the http server port for
-      #   # diagnostics, health checks and metrics.
-      #   # Uncomment below line to enable the `http-endpoint` arg for sidecar
-      #   httpEndpointPort: 8093
-      ## For further options, check
-      ## https://github.com/kubernetes-csi/external-attacher#command-line-options
-      extraArgs: []
-
     resizer:
       name: resizer
       enabled: true
       image:
         repository: registry.k8s.io/sig-storage/csi-resizer
-        tag: v1.13.1
+        tag: v1.11.1
         pullPolicy: IfNotPresent
       resources: {}
       args:
@@ -268,7 +242,7 @@ ceph-csi-cephfs:
         # httpEndpointPort specifies the http server port for
         # diagnostics, health checks and metrics.
         # Uncomment below line to enable the `http-endpoint` arg for sidecar
-        #httpEndpointPort: 8092
+        # httpEndpointPort: 8092
       ## For further options, check
       ## https://github.com/kubernetes-csi/external-snapshotter#csi-external-snapshotter-sidecar-command-line-options
       extraArgs: []
