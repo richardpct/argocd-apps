@@ -403,10 +403,6 @@ controller:
   # Plugins will be installed during Jenkins controller start
   # -- List of Jenkins plugins to install. If you don't want to install plugins, set it to `false`
   installPlugins: false
-#    - kubernetes:4340.v345364d31a_2a_
-#    - workflow-aggregator:608.v67378e9d3db_1
-#    - git:5.7.0
-#    - configuration-as-code:1985.vdda_32d0c4ea_b_
 
   # If set to false, Jenkins will download the minimum required version of all dependencies.
   # -- Download the minimum required version or latest version of all dependencies
