@@ -736,7 +736,7 @@ jenkins:
       # -- Hostname to serve assets from
       resourceRootUrl:
       # -- Ingress TLS configuration
-      tls: []
+      tls:
       - secretName: ""
         hosts:
           - jenkins.unixworld.io
