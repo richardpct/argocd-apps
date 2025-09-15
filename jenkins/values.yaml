@@ -737,9 +737,9 @@ jenkins:
       resourceRootUrl:
       # -- Ingress TLS configuration
       tls: []
-      # - secretName: jenkins.cluster.local
-      #   hosts:
-      #     - jenkins.cluster.local
+      - secretName: ""
+        hosts:
+          - jenkins.unixworld.io
   
     # often you want to have your controller all locked down and private,
     # but you still want to get webhooks from your SCM
