@@ -82,7 +82,7 @@ jenkins:
       username: "admin"
       # -- Admin password created as a secret if `controller.admin.createSecret` is true
       # @default -- <random password>
-      password: "admin"
+      password:
   
       # -- The key in the existing admin secret containing the username
       userKey: jenkins-admin-user
@@ -538,7 +538,7 @@ jenkins:
       # -- Jenkins Config as Code Security Realm-section
       securityRealm: |-
         local:
-          allowsSignup: false
+          allowsSignup: true
           enableCaptcha: false
           users:
           - id: "${chart-admin-username}"
