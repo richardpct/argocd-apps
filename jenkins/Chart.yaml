@@ -2,9 +2,9 @@ apiVersion: v2
 name: jenkins
 description: A Helm chart for Kubernetes
 type: application
-version: 5.8.47
-appVersion: 2.504.1
+version: 5.8.86
+appVersion: 2.516.2
 dependencies:
   - name: jenkins
     repository: https://charts.jenkins.io
-    version: 5.8.47
+    version: 5.8.86
