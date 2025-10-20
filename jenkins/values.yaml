@@ -164,9 +164,6 @@ jenkins:
     # Set min/max heap here if needed with "-Xms512m -Xmx512m"
     # -- Append to `JAVA_OPTS` env var
     javaOpts: "-Duser.timezone=Europe/Paris  -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/Paris"
-    env:
-      - name: TZ
-        value: "Europe/Paris"
     # -- Append to `JENKINS_OPTS` env var
     jenkinsOpts:
   
