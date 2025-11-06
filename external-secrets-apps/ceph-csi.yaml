@@ -27,11 +27,11 @@ spec:
   target:
     name: csi-cephfs-secret
   data:
-  - secretKey: ceph
+  - secretKey: userID
     remoteRef:
       key: ceph
       property: userID
-  - secretKey: ceph
+  - secretKey: userKey
     remoteRef:
       key: ceph
       property: userKey
