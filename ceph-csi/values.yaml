@@ -96,19 +96,19 @@ ceph-csi-cephfs:
     profiling:
       enabled: false
 
-    registrar:
-      image:
-        repository: registry.k8s.io/sig-storage/csi-node-driver-registrar
-        tag: v2.11.1
-        pullPolicy: IfNotPresent
-      resources: {}
+    #registrar:
+    #  image:
+    #    repository: registry.k8s.io/sig-storage/csi-node-driver-registrar
+    #    tag: v2.11.1
+    #    pullPolicy: IfNotPresent
+    #  resources: {}
 
-    plugin:
-      image:
-        repository: quay.io/cephcsi/cephcsi
-        tag: canary
-        pullPolicy: IfNotPresent
-      resources: {}
+    #plugin:
+    #  image:
+    #    repository: quay.io/cephcsi/cephcsi
+    #    tag: canary
+    #    pullPolicy: IfNotPresent
+    #  resources: {}
 
     nodeSelector: {}
 
@@ -194,45 +194,45 @@ ceph-csi-cephfs:
     profiling:
       enabled: false
 
-    provisioner:
-      image:
-        repository: registry.k8s.io/sig-storage/csi-provisioner
-        tag: v5.0.1
-        pullPolicy: IfNotPresent
-      resources: {}
-      args:
-      #   # httpEndpointPort specifies the http server port for
-      #   # diagnostics, health checks and metrics.
-      #   # Uncomment below line to enable the `http-endpoint` arg for sidecar
-      #   httpEndpointPort: 8090
-      ## For further options, check
-      ## https://github.com/kubernetes-csi/external-provisioner#command-line-options
-      extraArgs: []
+    #provisioner:
+    #  image:
+    #    repository: registry.k8s.io/sig-storage/csi-provisioner
+    #    tag: v5.0.1
+    #    pullPolicy: IfNotPresent
+    #  resources: {}
+    #  args:
+    #  #   # httpEndpointPort specifies the http server port for
+    #  #   # diagnostics, health checks and metrics.
+    #  #   # Uncomment below line to enable the `http-endpoint` arg for sidecar
+    #  #   httpEndpointPort: 8090
+    #  ## For further options, check
+    #  ## https://github.com/kubernetes-csi/external-provisioner#command-line-options
+    #  extraArgs: []
 
     # set metadata on volume
     setmetadata: true
 
-    resizer:
-      name: resizer
-      enabled: true
-      image:
-        repository: registry.k8s.io/sig-storage/csi-resizer
-        tag: v1.11.1
-        pullPolicy: IfNotPresent
-      resources: {}
-      args:
-      #   # httpEndpointPort specifies the http server port for
-      #   # diagnostics, health checks and metrics.
-      #   # Uncomment below line to enable the `http-endpoint` arg for sidecar
-      #   httpEndpointPort: 8091
-      ## For further options, check
-      ## https://github.com/kubernetes-csi/external-resizer#recommended-optional-arguments
-      extraArgs: []
+    #resizer:
+    #  name: resizer
+    #  enabled: true
+    #  image:
+    #    repository: registry.k8s.io/sig-storage/csi-resizer
+    #    tag: v1.11.1
+    #    pullPolicy: IfNotPresent
+    #  resources: {}
+    #  args:
+    #  #   # httpEndpointPort specifies the http server port for
+    #  #   # diagnostics, health checks and metrics.
+    #  #   # Uncomment below line to enable the `http-endpoint` arg for sidecar
+    #  #   httpEndpointPort: 8091
+    #  ## For further options, check
+    #  ## https://github.com/kubernetes-csi/external-resizer#recommended-optional-arguments
+    #  extraArgs: []
 
     #snapshotter:
     #  image:
     #    repository: registry.k8s.io/sig-storage/csi-snapshotter
-    #    tag: v8.0.1
+    #    #tag: v8.0.1
     #    pullPolicy: IfNotPresent
     #  resources: {}
     #  args:
