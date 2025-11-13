@@ -67,7 +67,8 @@ gitlab:
       https: true
       externalIP:
       ssh:
-      gitlab: gitlab.unixworld.io
+      gitlab:
+        name: gitlab.unixworld.io
       minio: {}
       registry: {}
       tls: {}
