@@ -89,7 +89,7 @@ gitlab:
       enabled: true
       tls:
         enabled: true
-        secretName: toto
+      #  secretName: toto
       path: /
       pathType: Prefix
 
