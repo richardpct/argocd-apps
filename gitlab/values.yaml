@@ -84,7 +84,7 @@ gitlab:
       configureCertmanager: false
       useNewIngressForCerts: false
       provider: cilium
-      # class:
+      class: cilium
       annotations: {}
       enabled: true
       tls:
