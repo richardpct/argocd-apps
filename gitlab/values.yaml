@@ -89,7 +89,7 @@ gitlab:
       enabled: true
       tls:
         enabled: true
-        secret: gitlab-tls-cert
+        secretName: gitlab-tls-cert
       path: /
       pathType: Prefix
 
