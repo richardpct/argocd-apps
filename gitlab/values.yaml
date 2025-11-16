@@ -1453,7 +1453,7 @@ gitlab:
               ServerAddress = {{ include "gitlab-runner.cache-tpl.s3ServerAddress" . }}
               BucketName = "runner-cache"
               BucketLocation = "us-east-1"
-              Insecure = true
+              Insecure = false
           {{ end }}
     podAnnotations:
       gitlab.com/prometheus_scrape: "true"
