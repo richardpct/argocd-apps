@@ -88,7 +88,8 @@ gitlab:
       annotations: {}
       enabled: true
       tls:
-        enabled: false
+        enabled: true
+        secret: gitlab-tls-cert
       path: /
       pathType: Prefix
 
