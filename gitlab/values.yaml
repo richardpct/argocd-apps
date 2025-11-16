@@ -126,8 +126,8 @@ gitlab:
     ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#initial-root-password
     ## If allowing shared-secrets generation, this is OPTIONAL.
     initialRootPassword: {}
-    #  secret: gitlab-root-password
-    #  key: password
+      secret: gitlab-root-password
+      key: password
 
     ## https://docs.gitlab.com/charts/charts/globals#configure-postgresql-settings
     psql:
