@@ -2017,7 +2017,7 @@ kube-prometheus-stack:
             resources:
               requests:
                 storage: 10Gi
-            selector: {}
+            #selector: {}
   
       ## Using tmpfs volume
       ##
