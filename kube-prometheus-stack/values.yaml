@@ -2012,7 +2012,7 @@ kube-prometheus-stack:
       ##
         volumeClaimTemplate:
           spec:
-            #storageClassName: gluster
+            storageClassName: csi-cephfs-sc
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
