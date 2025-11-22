@@ -83,3 +83,10 @@ kube-prometheus-stack:
         - secretName: ""
           hosts:
             - prometheus.unixworld.io
+
+      prometheusSpec:
+        additionalScrapeConfigs: |
+          - job_name: "load-balancer"
+            static_configs:
+              - targets:
+                  - "192.168.1.130:9100"
