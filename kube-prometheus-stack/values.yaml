@@ -86,7 +86,7 @@ kube-prometheus-stack:
 
       serviceMonitor:
         prometheusSpec:
-          additionalScrapeConfigs: |
+          additionalScrapeConfigs:
             - job_name: "load-balancer"
               static_configs:
                 - targets:
