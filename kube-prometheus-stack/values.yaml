@@ -88,10 +88,10 @@ kube-prometheus-stack:
       # selector:
       #   component: kube-controller-manager
 
-      serviceMonitor:
-        enabled: true
-        https: true
-        insecureSkipVerify: false
+    serviceMonitor:
+      enabled: true
+      https: true
+      insecureSkipVerify: false
 
   ## Deploy a Prometheus instance
   ##
