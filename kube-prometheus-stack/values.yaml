@@ -66,7 +66,8 @@ kube-prometheus-stack:
 
     ## If your kube controller manager is not deployed as a pod, specify IPs it can be found on
     ##
-    endpoints: []
+    endpoints:
+      - 10257
     # - 10.141.4.22
     # - 10.141.4.23
     # - 10.141.4.24
