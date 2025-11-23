@@ -58,7 +58,7 @@ kube-prometheus-stack:
   ## Component scraping the kube controller manager
   ##
   kubeControllerManager:
-    enabled: false
+    enabled: true
 
     # Overrides the job selector in Grafana dashboards and Prometheus rules
     # For k3s clusters, change to k3s-server
