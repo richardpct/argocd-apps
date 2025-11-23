@@ -88,10 +88,9 @@ kube-prometheus-stack:
           hosts:
             - prometheus.unixworld.io
 
-      serviceMonitor:
-        prometheusSpec:
-          additionalScrapeConfigs: |
-            - job_name: "load-balancer"
-              static_configs:
-                - targets:
-                    - "192.168.1.130:9100"
+    prometheusSpec:
+      additionalScrapeConfigs:
+        - job_name: "load-balancer"
+          static_configs:
+            - targets:
+                - "192.168.1.130:9100"
