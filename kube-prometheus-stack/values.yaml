@@ -90,7 +90,7 @@ kube-prometheus-stack:
     serviceMonitor:
       enabled: true
       https: true
-      insecureSkipVerify: false
+      insecureSkipVerify: true
 
   ## Deploy a Prometheus instance
   ##
