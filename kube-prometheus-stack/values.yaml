@@ -132,3 +132,12 @@ kube-prometheus-stack:
               regex: 192\.168\.1\.20:9283
               target_label: instance
               replacement: pve01
+
+    additionalServiceMonitors:
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_pod_node_name]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: nodename
+        replacement: $1
+        action: replace
