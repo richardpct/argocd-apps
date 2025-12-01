@@ -134,11 +134,17 @@ kube-prometheus-stack:
               replacement: pve01
 
     additionalServiceMonitors:
-      - name: node-exporter-internal
-        relabelings:
-        - sourceLabels: [__meta_kubernetes_pod_node_name]
-          separator: ;
-          regex: ^(.*)$
-          targetLabel: nodename
-          replacement: $1
-          action: replace
+      - name: node-exporter
+        namespaceSelector:
+          any: true
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: node-exporter
+        endpoints:
+          - port: metrics
+            interval: 30s
+            relabelings:
+              - sourceLabels: [__meta_kubernetes_pod_node_name]
+                targetLabel: instance
+              - sourceLabels: [__address__]
+                targetLabel: target
