@@ -101,3 +101,7 @@ kube-prometheus-stack:
           static_configs:
             - targets:
                 - "192.168.1.130:8405"
+        - job_name: 'ceph'
+          static_configs:
+            - targets:
+                - "192.168.1.20:9283"
