@@ -120,7 +120,7 @@ kube-prometheus-stack:
                 - "192.168.1.130:8405"
           relabel_configs:
             - source_labels: [__address__]
-              regex: 192\.168\.1\.130:9100
+              regex: 192\.168\.1\.130:8405
               target_label: instance
               replacement: load-balancer-01
         - job_name: 'ceph'
@@ -129,6 +129,6 @@ kube-prometheus-stack:
                 - "192.168.1.20:9283"
           relabel_configs:
             - source_labels: [__address__]
-              regex: 192\.168\.1\.20:9100
+              regex: 192\.168\.1\.20:9283
               target_label: instance
               replacement: pve01
