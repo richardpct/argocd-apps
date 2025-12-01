@@ -97,11 +97,38 @@ kube-prometheus-stack:
                 - "192.168.1.21:9100"
                 - "192.168.1.22:9100"
                 - "192.168.1.130:9100"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.20:9100
+              target_label: instance
+              replacement: pve01
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.21:9100
+              target_label: instance
+              replacement: pve02
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.22:9100
+              target_label: instance
+              replacement: pve03
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.130:9100
+              target_label: instance
+              replacement: load-balancer-01
         - job_name: 'load-balancer-metrics'
           static_configs:
             - targets:
                 - "192.168.1.130:8405"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.130:9100
+              target_label: instance
+              replacement: load-balancer-01
         - job_name: 'ceph'
           static_configs:
             - targets:
                 - "192.168.1.20:9283"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.20:9100
+              target_label: instance
+              replacement: pve01
