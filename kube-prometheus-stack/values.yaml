@@ -145,6 +145,8 @@ kube-prometheus-stack:
             interval: 30s
             relabelings:
               - sourceLabels: [__meta_kubernetes_pod_node_name]
-                targetLabel: instance
-              - sourceLabels: [__address__]
-                targetLabel: target
+                separator: ;
+                regex: ^(.*)$
+                targetLabel: nodename
+                replacement: $1
+                action: replace
