@@ -141,8 +141,7 @@ kube-prometheus-stack:
           matchLabels:
             app.kubernetes.io/name: prometheus-node-exporter
         endpoints:
-          - port: http-metrics
-            interval: 30s
+          - interval: 30s
             relabelings:
               - sourceLabels: [__meta_kubernetes_pod_node_name]
                 separator: ;
