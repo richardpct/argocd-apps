@@ -134,7 +134,7 @@ kube-prometheus-stack:
               replacement: pve01
 
     additionalServiceMonitors:
-      - name: kube-prometheus-stack-prometheus-node-exporter
+      - name: toto
         namespaceSelector:
           any: true
         selector:
