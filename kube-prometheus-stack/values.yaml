@@ -55,6 +55,23 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
 
+  prometheus-node-exporter:
+    prometheus:
+      monitor:
+        relabelings:
+          - sourceLabels: [__meta_kubernetes_pod_node_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+          #- action: replace
+          #  regex: (.*)
+          #  replacement: $1
+          #  sourceLabels:
+          #    - __meta_kubernetes_pod_node_name
+          #  targetLabel: instance
+
   ## Deploy a Prometheus instance
   ##
   prometheus:
@@ -132,22 +149,3 @@ kube-prometheus-stack:
               regex: 192\.168\.1\.20:9283
               target_label: instance
               replacement: pve01
-
-    additionalServiceMonitors:
-      - name: toto
-        namespaceSelector:
-          any: true
-        selector:
-          matchLabels:
-            app.kubernetes.io/instance: kube-prometheus-stack
-            app.kubernetes.io/name: prometheus-node-exporter
-        endpoints:
-          - port: http-metrics
-            scheme: http
-          - relabelings:
-              - sourceLabels: [__meta_kubernetes_pod_node_name]
-                separator: ;
-                regex: ^(.*)$
-                targetLabel: instance
-                replacement: $1
-                action: replace
