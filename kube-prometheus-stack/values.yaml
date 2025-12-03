@@ -134,15 +134,17 @@ kube-prometheus-stack:
               replacement: pve01
 
     additionalServiceMonitors:
-      - name: node-exporter
+      - name: kube-prometheus-stack-prometheus-node-exporter
         namespaceSelector:
           any: true
         selector:
           matchLabels:
+            app.kubernetes.io/instance: kube-prometheus-stack
             app.kubernetes.io/name: prometheus-node-exporter
         endpoints:
-          - interval: 30s
-            relabelings:
+          - port: http-metrics
+            scheme: http
+          - relabelings:
               - sourceLabels: [__meta_kubernetes_pod_node_name]
                 separator: ;
                 regex: ^(.*)$
