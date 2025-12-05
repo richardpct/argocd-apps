@@ -110,18 +110,18 @@ kube-prometheus-stack:
     serviceMonitor:
       relabelings:
         - sourceLabels: [__address__]
-          regex: ^(.*)$
-          targetLabel: 192\.168\.1\.111:6443
+          regex: 192\.168\.1\.111:6443
+          targetLabel: instance
           replacement: k8s-control-plane-01
           action: replace
         - sourceLabels: [__address__]
-          regex: ^(.*)$
-          targetLabel: 192\.168\.1\.112:6443
+          regex: 192\.168\.1\.112:6443
+          targetLabel: instance
           replacement: k8s-control-plane-02
           action: replace
         - sourceLabels: [__address__]
-          regex: ^(.*)$
-          targetLabel: 192\.168\.1\.113:6443
+          regex: 192\.168\.1\.113:6443
+          targetLabel: instance
           replacement: k8s-control-plane-03
           action: replace
 
