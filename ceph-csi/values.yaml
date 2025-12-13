@@ -1,7 +1,7 @@
 ---
 ceph-csi-cephfs:
   csiConfig:
-    - clusterID: 2a0158eb-c916-4336-94da-d3a05550cdf5
+    - clusterID: 4ff2afbf-9d45-4f82-8d53-3849f6594e84
       monitors:
         - "192.168.1.21"
         - "192.168.1.22"
@@ -32,7 +32,7 @@ ceph-csi-cephfs:
     # Should be unique across all Ceph clusters in use for provisioning,
     # cannot be greater than 36 bytes in length, and should remain immutable for
     # the lifetime of the StorageClass in use.
-    clusterID: 2a0158eb-c916-4336-94da-d3a05550cdf5
+    clusterID: 4ff2afbf-9d45-4f82-8d53-3849f6594e84
     # (required) CephFS filesystem name into which the volume shall be created
     # eg: fsName: myfs
     fsName: cephfs
