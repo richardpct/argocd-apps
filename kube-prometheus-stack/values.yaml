@@ -1,0 +1,204 @@
+---
+kube-prometheus-stack:
+  ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+  ##
+  grafana:
+    enabled: true
+
+    # Administrator credentials when not using an existing secret (see below)
+    adminUser: admin
+    # adminPassword: strongpassword
+
+    # Use an existing secret for the admin user.
+    admin:
+      ## Name of the secret. Can be templated.
+      existingSecret: grafana-admin-password
+      userKey: admin-user
+      passwordKey: admin-password
+
+    ingress:
+      ## If true, Grafana Ingress will be created
+      ##
+      enabled: true
+
+      ## IngressClassName for Grafana Ingress.
+      ## Should be provided if Ingress is enable.
+      ##
+      ingressClassName: cilium
+
+      ## Hostnames.
+      ## Must be provided if Ingress is enable.
+      ##
+      hosts:
+        - grafana.unixworld.io
+
+      ## Path for grafana ingress
+      path: /
+
+      ## TLS configuration for grafana Ingress
+      ## Secret must be manually created in the namespace
+      ##
+      tls:
+      - secretName: ""
+        hosts:
+        - grafana.unixworld.io
+
+    # # To make Grafana persistent (Using Statefulset)
+    # #
+    persistence:
+      enabled: true
+      type: sts
+      #storageClassName: "storageClassName"
+      accessModes:
+        - ReadWriteOnce
+      size: 20Gi
+      finalizers:
+        - kubernetes.io/pvc-protection
+
+  prometheus-node-exporter:
+    prometheus:
+      monitor:
+        relabelings:
+          - sourceLabels: [__meta_kubernetes_pod_node_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+  kubeControllerManager:
+    serviceMonitor:
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+  kubeScheduler:
+    serviceMonitor:
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+  kubelet:
+    serviceMonitor:
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+  kubeEtcd:
+    serviceMonitor:
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+  kubeApiServer:
+    serviceMonitor:
+      relabelings:
+        - sourceLabels: [__address__]
+          regex: 192\.168\.1\.111:6443
+          targetLabel: instance
+          replacement: k8s-control-plane-01
+          action: replace
+        - sourceLabels: [__address__]
+          regex: 192\.168\.1\.112:6443
+          targetLabel: instance
+          replacement: k8s-control-plane-02
+          action: replace
+        - sourceLabels: [__address__]
+          regex: 192\.168\.1\.113:6443
+          targetLabel: instance
+          replacement: k8s-control-plane-03
+          action: replace
+
+  ## Deploy a Prometheus instance
+  ##
+  prometheus:
+    enabled: true
+
+    ingress:
+      enabled: true
+
+      ingressClassName: cilium
+
+      ## Hostnames.
+      ## Must be provided if Ingress is enabled.
+      ##
+      hosts:
+        - prometheus.unixworld.io
+
+      ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
+      ##
+      paths:
+        - "/"
+
+      ## For Kubernetes >= 1.18 you should specify the pathType (determines how Ingress paths should be matched)
+      ## See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#better-path-matching-with-path-types
+      pathType: Prefix
+
+      ## TLS configuration for Prometheus Ingress
+      ## Secret must be manually created in the namespace
+      ##
+      tls:
+        - secretName: ""
+          hosts:
+            - prometheus.unixworld.io
+
+    prometheusSpec:
+      additionalScrapeConfigs:
+        - job_name: "node-exporter"
+          static_configs:
+            - targets:
+                - "192.168.1.20:9100"
+                - "192.168.1.21:9100"
+                - "192.168.1.22:9100"
+                - "192.168.1.130:9100"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.20:9100
+              target_label: instance
+              replacement: pve01
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.21:9100
+              target_label: instance
+              replacement: pve02
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.22:9100
+              target_label: instance
+              replacement: pve03
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.130:9100
+              target_label: instance
+              replacement: load-balancer-01
+        - job_name: 'load-balancer-metrics'
+          static_configs:
+            - targets:
+                - "192.168.1.130:8405"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.130:8405
+              target_label: instance
+              replacement: load-balancer-01
+        - job_name: 'ceph'
+          static_configs:
+            - targets:
+                - "192.168.1.20:9283"
+          relabel_configs:
+            - source_labels: [__address__]
+              regex: 192\.168\.1\.20:9283
+              target_label: instance
+              replacement: pve01
