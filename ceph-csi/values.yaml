@@ -1,13 +1,13 @@
 ---
 ceph-csi-cephfs:
-  csiConfig:
+  #csiConfig:
   #  - clusterID: 0b7beb90-9ab1-4a23-96f2-23fffe87944c
-    - monitors:
-        - "192.168.1.21"
-        - "192.168.1.22"
-        - "192.168.1.23"
-      cephFS:
-        subvolumeGroup: "kubernetes"
+  #    monitors:
+  #      - "192.168.1.21"
+  #      - "192.168.1.22"
+  #      - "192.168.1.23"
+  #    cephFS:
+  #      subvolumeGroup: "kubernetes"
 
   # Set logging level for csi containers.
   # Supported values from 0 to 5. 0 for general useful logs,
