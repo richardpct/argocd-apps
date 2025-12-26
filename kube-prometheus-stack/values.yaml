@@ -19,29 +19,29 @@ kube-prometheus-stack:
     ingress:
       ## If true, Grafana Ingress will be created
       ##
-      enabled: true
+      enabled: false
 
-      ## IngressClassName for Grafana Ingress.
-      ## Should be provided if Ingress is enable.
-      ##
-      ingressClassName: cilium
+    #####  ## IngressClassName for Grafana Ingress.
+    #####  ## Should be provided if Ingress is enable.
+    #####  ##
+    #####  ingressClassName: cilium
 
-      ## Hostnames.
-      ## Must be provided if Ingress is enable.
-      ##
-      hosts:
-        - grafana.unixworld.io
+    #####  ## Hostnames.
+    #####  ## Must be provided if Ingress is enable.
+    #####  ##
+    #####  hosts:
+    #####    - grafana.unixworld.io
 
-      ## Path for grafana ingress
-      path: /
+    #####  ## Path for grafana ingress
+    #####  path: /
 
-      ## TLS configuration for grafana Ingress
-      ## Secret must be manually created in the namespace
-      ##
-      tls:
-      - secretName: ""
-        hosts:
-        - grafana.unixworld.io
+    #####  ## TLS configuration for grafana Ingress
+    #####  ## Secret must be manually created in the namespace
+    #####  ##
+    #####  tls:
+    #####  - secretName: ""
+    #####    hosts:
+    #####    - grafana.unixworld.io
 
     # # To make Grafana persistent (Using Statefulset)
     # #
@@ -202,3 +202,24 @@ kube-prometheus-stack:
               regex: 192\.168\.1\.21:9283
               target_label: instance
               replacement: pve01
+
+  extraManifests:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: https-grafana
+      namespace: monitoring
+    spec:
+      parentRefs:
+      - name: tls-gateway
+        namespace: kube-system
+      hostnames:
+      - "grafana.unixworld.io"
+      rules:
+      - matches:
+        - path:
+            type: PathPrefix
+            value: /
+        backendRefs:
+        - name: kube-prometheus-stack-grafana
+          port: 80
