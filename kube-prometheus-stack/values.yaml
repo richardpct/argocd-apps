@@ -224,3 +224,23 @@ kube-prometheus-stack:
           backendRefs:
           - name: kube-prometheus-stack-grafana
             port: 80
+      ---
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: https-prometheus
+        namespace: monitoring
+      spec:
+        parentRefs:
+        - name: tls-gateway
+          namespace: kube-system
+        hostnames:
+        - "prometheus.unixworld.io"
+        rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
+          backendRefs:
+          - name: kube-prometheus-stack-prometheus
+            port: 8080
