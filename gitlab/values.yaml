@@ -1012,8 +1012,7 @@ gitlab:
   ## https://docs.gitlab.com/charts/charts/nginx/
   ## https://docs.gitlab.com/charts/architecture/decisions#nginx-ingress
   ## Installation & configuration of charts/ingress-nginx:
-  #nginx-ingress: &nginx-ingress
-  nginx-ingress:
+  nginx-ingress: &nginx-ingress
     enabled: false
     tcpExternalConfig: "true"
     controller: &nginx-ingress-controller
@@ -1484,8 +1483,10 @@ gitlab:
     #   migrations:
     #     enabled: false
     ## https://docs.gitlab.com/charts/charts/gitlab/webservice
-    #   webservice:
+    webservice:
     #     enabled: false
+      ingress:
+        enabled: false
     ## https://docs.gitlab.com/charts/charts/gitlab/sidekiq
     #   sidekiq:
     #     enabled: false
