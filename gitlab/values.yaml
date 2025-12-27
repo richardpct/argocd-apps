@@ -86,7 +86,7 @@ gitlab:
       provider: cilium
       class: cilium
       annotations: {}
-      enabled: true
+      enabled: false
       tls:
         enabled: true
         secretName: gitlab-tls-cert
