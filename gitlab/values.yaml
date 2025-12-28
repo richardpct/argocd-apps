@@ -1487,7 +1487,6 @@ gitlab:
     #     enabled: false
       ingress:
         enabled: false
-      trusted_proxies: ["0.0.0.0/0"]
     ## https://docs.gitlab.com/charts/charts/gitlab/sidekiq
     #   sidekiq:
     #     enabled: false
