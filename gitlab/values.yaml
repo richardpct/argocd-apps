@@ -86,7 +86,7 @@ gitlab:
       provider: cilium
       class: cilium
       annotations: {}
-      enabled: true
+      enabled: false
       tls:
         enabled: true
         secretName: gitlab-tls-cert
@@ -1483,8 +1483,10 @@ gitlab:
     #   migrations:
     #     enabled: false
     ## https://docs.gitlab.com/charts/charts/gitlab/webservice
-    #   webservice:
+    webservice:
     #     enabled: false
+      ingress:
+        enabled: false
     ## https://docs.gitlab.com/charts/charts/gitlab/sidekiq
     #   sidekiq:
     #     enabled: false
