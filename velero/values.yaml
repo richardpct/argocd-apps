@@ -16,7 +16,7 @@ velero:
       provider: aws
       config:
         region: default
-    defaultVolumesToFsBackup: true
+    #defaultVolumesToFsBackup: true
   credentials:
     useSecret: true
     name: minio-secret
@@ -65,3 +65,4 @@ velero:
         storageLocation: backup-storage
         includedNamespaces:
         - gitlab
+        defaultVolumesToFsBackup: true
