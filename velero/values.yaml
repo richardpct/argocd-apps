@@ -5,7 +5,7 @@ velero:
     - name: backup-storage
       provider: "aws"
       bucket: "mybucket"
-      default: true
+      default: false
       accessMode: ReadWrite
       config:
         region: default
@@ -61,6 +61,6 @@ velero:
       skipImmediately: false
       template:
         ttl: "240h"
-        storageLocation: default
+        storageLocation: backup-storage
         includedNamespaces:
         - gitlab
