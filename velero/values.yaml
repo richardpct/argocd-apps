@@ -17,10 +17,9 @@ velero:
       config:
         region: default
   deployNodeAgent: true
-    nodeAgent:
-      #disableHostPath: false
-      podVolumePath: /var/lib/kubelet/pods
-    #defaultVolumesToFsBackup: true
+  nodeAgent:
+    #disableHostPath: false
+    podVolumePath: /var/lib/kubelet/pods
   credentials:
     useSecret: true
     name: minio-secret
