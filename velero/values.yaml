@@ -16,7 +16,7 @@ velero:
       provider: aws
       config:
         region: default
-    deployNodeAgent: true
+  deployNodeAgent: true
     nodeAgent:
       #disableHostPath: false
       podVolumePath: /var/lib/kubelet/pods
