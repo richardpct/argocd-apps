@@ -16,6 +16,7 @@ velero:
       provider: aws
       config:
         region: default
+    defaultVolumesToFsBackup: true
   credentials:
     useSecret: true
     name: minio-secret
