@@ -36,3 +36,11 @@ velero:
     #    aws_access_key_id=<REDACTED>
     #    aws_secret_access_key=<REDACTED>
     # additional key/value pairs to be used as environment variables such as "DIGITALOCEAN_TOKEN: <your-key>". Values will be stored in the secret.
+  kubectl:
+    image:
+      repository: docker.io/bitnamilegacy/kubectl
+      # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38.
+      # If used, it will take precedence over the kubectl.image.tag.
+      # digest:
+      # kubectl image tag. If used, it will take precedence over the cluster Kubernetes version.
+      tag: 1.33.4
