@@ -5,7 +5,7 @@ velero:
     - name: backup-storage
       provider: "aws"
       bucket: "mybucket"
-      default: false
+      default: true
       accessMode: ReadWrite
       config:
         region: default
@@ -51,3 +51,16 @@ velero:
       volumeMounts:
         - mountPath: /target
           name: plugins
+
+  schedules:
+    gitlab:
+      disabled: false
+      schedule: "0 0 * * *"
+      useOwnerReferencesInBackup: false
+      paused: false
+      skipImmediately: false
+      template:
+        ttl: "240h"
+        storageLocation: default
+        includedNamespaces:
+        - gitlab
