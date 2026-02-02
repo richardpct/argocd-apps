@@ -16,6 +16,7 @@ velero:
       provider: aws
       config:
         region: default
+    defaultVolumesToFsBackup: true
   deployNodeAgent: true
   nodeAgent:
     #disableHostPath: false
