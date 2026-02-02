@@ -69,3 +69,27 @@ velero:
         includedNamespaces:
         - gitlab
         defaultVolumesToFsBackup: true
+    vault:
+      disabled: false
+      schedule: "0 0 * * *"
+      useOwnerReferencesInBackup: false
+      paused: false
+      skipImmediately: false
+      template:
+        ttl: "240h"
+        storageLocation: backup-storage
+        includedNamespaces:
+        - vault
+        defaultVolumesToFsBackup: true
+    monitoring:
+      disabled: false
+      schedule: "0 0 * * *"
+      useOwnerReferencesInBackup: false
+      paused: false
+      skipImmediately: false
+      template:
+        ttl: "240h"
+        storageLocation: backup-storage
+        includedNamespaces:
+        - monitoring
+        defaultVolumesToFsBackup: true
