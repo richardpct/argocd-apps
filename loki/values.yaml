@@ -54,3 +54,11 @@ loki:
     replicas: 0
   bloomGateway:
     replicas: 0
+
+  chunksCache:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        memory: "512Mi"
