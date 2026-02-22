@@ -44,11 +44,7 @@ alloy:
         // --- D. SEND TO LOKI GATEWAY ---
         loki.write "loki_gateway" {
           endpoint {
-            # Using internal Kubernetes DNS for speed and security
-            #url = "http://loki-gateway.loki.svc.cluster.local:80/loki/api/v1/push"
             url = "https://loki.unixworld.io/loki/api/v1/push"
-
-            # The multi-tenant ID we configured in Grafana earlier!
             tenant_id = "tenant1"
           }
         }
