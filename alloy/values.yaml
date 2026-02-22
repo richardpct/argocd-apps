@@ -8,3 +8,49 @@ alloy:
           level = "info"
           format = "logfmt"
         }
+
+        // --- A. DISCOVER KUBERNETES PODS ---
+        discovery.kubernetes "pods" {
+          role = "pod"
+        }
+
+        // --- B. CLEAN UP LABELS ---
+        // This translates long Kubernetes metadata into clean Grafana labels
+        discovery.relabel "pod_logs" {
+          targets = discovery.kubernetes.pods.targets
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            action        = "replace"
+            target_label  = "namespace"
+          }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            action        = "replace"
+            target_label  = "pod"
+          }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            action        = "replace"
+            target_label  = "container"
+          }
+        }
+
+        // --- C. READ THE LOG FILES ---
+        loki.source.kubernetes "pods" {
+          targets    = discovery.relabel.pod_logs.output
+          forward_to = [loki.write.loki_gateway.receiver]
+        }
+
+        // --- D. SEND TO LOKI GATEWAY ---
+        loki.write "loki_gateway" {
+          endpoint {
+            # Using internal Kubernetes DNS for speed and security
+            #url = "http://loki-gateway.loki.svc.cluster.local:80/loki/api/v1/push"
+            url = "https://loki.unixworld.io/loki/api/v1/push"
+
+            # The multi-tenant ID we configured in Grafana earlier!
+            tenant_id = "tenant1"
+          }
+        }
+  rbac:
+    create: true
