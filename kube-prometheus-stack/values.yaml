@@ -33,6 +33,19 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
 
+    additionalDataSources:
+      - name: loki
+        access: proxy
+        type: loki
+        url: https://loki.unixworld.io
+        basicAuth: true
+        basicAuthUser: loki
+        jsonData:
+          httpHeaderName1: 'X-Scope-OrgID'
+        secureJsonData:
+          basicAuthPassword: password123
+          httpHeaderValue1: 'tenant1'
+
   prometheus-node-exporter:
     prometheus:
       monitor:
