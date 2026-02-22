@@ -46,6 +46,10 @@ alloy:
           endpoint {
             url = "https://loki.unixworld.io/loki/api/v1/push"
             tenant_id = "tenant1"
+            basic_auth {
+            username = "loki"
+            password = "password123"
+            }
           }
         }
   rbac:
