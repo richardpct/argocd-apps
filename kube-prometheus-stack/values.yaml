@@ -33,6 +33,12 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
 
+    envValueFrom:
+      loki_tenant:
+        secretKeyRef:
+          name: loki-auth-secret
+          key: tenant
+
     extraSecretMounts:
       - name: loki-auth-secret
         secretName: grafana-loki-auth
@@ -51,7 +57,8 @@ kube-prometheus-stack:
           httpHeaderName1: 'X-Scope-OrgID'
         secureJsonData:
           basicAuthPassword: $__file{/etc/secrets/loki/password}
-          httpHeaderValue1: 'tenant1'
+          #httpHeaderValue1: 'tenant1'
+          httpHeaderValue1: ${loki_tenant}
 
   prometheus-node-exporter:
     prometheus:
