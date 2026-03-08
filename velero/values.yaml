@@ -4,7 +4,7 @@ velero:
     backupStorageLocation:
     - name: backup-storage
       provider: "aws"
-      bucket: "velero"
+      bucket: "velero-backup"
       default: false
       accessMode: ReadWrite
       config:
