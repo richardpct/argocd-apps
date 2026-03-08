@@ -4,7 +4,7 @@ velero:
     backupStorageLocation:
     - name: backup-storage
       provider: "aws"
-      bucket: "mybucket"
+      bucket: "velero"
       default: false
       accessMode: ReadWrite
       config:
@@ -19,35 +19,14 @@ velero:
     defaultVolumesToFsBackup: true
   deployNodeAgent: true
   nodeAgent:
-    #disableHostPath: false
     podVolumePath: /var/lib/kubelet/pods
   credentials:
     useSecret: true
     name: minio-secret
-    # Name of a pre-existing secret (if any) in the Velero namespace
-    # that should be used to get IAM account credentials. Optional.
     existingSecret: minio-secret
-    # Data to be stored in the Velero secret, if `useSecret` is true and `existingSecret` is empty.
-    # As of the current Velero release, Velero only uses one secret key/value at a time.
-    # The key must be named `cloud`, and the value corresponds to the entire content of your IAM credentials file.
-    # Note that the format will be different for different providers, please check their documentation.
-    # Here is a list of documentation for plugins maintained by the Velero team:
-    # [AWS] https://github.com/vmware-tanzu/velero-plugin-for-aws/blob/main/README.md
-    # [GCP] https://github.com/vmware-tanzu/velero-plugin-for-gcp/blob/main/README.md
-    # [Azure] https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/main/README.md
-    #secretContents: {}
-    #  cloud: |
-    #    [default]
-    #    aws_access_key_id=<REDACTED>
-    #    aws_secret_access_key=<REDACTED>
-    # additional key/value pairs to be used as environment variables such as "DIGITALOCEAN_TOKEN: <your-key>". Values will be stored in the secret.
   kubectl:
     image:
       repository: docker.io/bitnamilegacy/kubectl
-      # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38.
-      # If used, it will take precedence over the kubectl.image.tag.
-      # digest:
-      # kubectl image tag. If used, it will take precedence over the cluster Kubernetes version.
       tag: 1.33.4
   initContainers:
     - name: velero-plugin-for-aws
@@ -73,39 +52,3 @@ velero:
           - kube-system
           - velero
         defaultVolumesToFsBackup: true
-#    gitlab:
-#      disabled: false
-#      schedule: "0 0 * * *"
-#      useOwnerReferencesInBackup: false
-#      paused: false
-#      skipImmediately: false
-#      template:
-#        ttl: "240h"
-#        storageLocation: backup-storage
-#        includedNamespaces:
-#        - gitlab
-#        defaultVolumesToFsBackup: true
-#    vault:
-#      disabled: false
-#      schedule: "0 0 * * *"
-#      useOwnerReferencesInBackup: false
-#      paused: false
-#      skipImmediately: false
-#      template:
-#        ttl: "240h"
-#        storageLocation: backup-storage
-#        includedNamespaces:
-#        - vault
-#        defaultVolumesToFsBackup: true
-#    monitoring:
-#      disabled: false
-#      schedule: "0 0 * * *"
-#      useOwnerReferencesInBackup: false
-#      paused: false
-#      skipImmediately: false
-#      template:
-#        ttl: "240h"
-#        storageLocation: backup-storage
-#        includedNamespaces:
-#        - monitoring
-#        defaultVolumesToFsBackup: true
