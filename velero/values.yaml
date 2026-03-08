@@ -57,24 +57,22 @@ velero:
         - mountPath: /target
           name: plugins
 
-#  schedules:
-#    daily-cluster-backup:
-#    disabled: false
-#    schedule: "0 11 * * *"
-#    useOwnerReferencesInBackup: false
-#    paused: false
-#    skipImmediately: false
-#    template:
-#      ttl: "240h"
-#      storageLocation: backup-storage
-#      includedNamespaces:
-#        - '*'
-#      excludedNamespaces:
-#        - kube-system
-#        - velero
-#      #excludedResources:
-#      #  - secrets
-#      defaultVolumesToFsBackup: true
+  schedules:
+    daily-cluster-backup:
+    disabled: false
+    schedule: "0 11 * * *"
+    useOwnerReferencesInBackup: false
+    paused: false
+    skipImmediately: false
+    template:
+      ttl: "240h"
+      storageLocation: backup-storage
+      includedNamespaces:
+        - '*'
+      excludedNamespaces:
+        - kube-system
+        - velero
+      defaultVolumesToFsBackup: true
 #    gitlab:
 #      disabled: false
 #      schedule: "0 0 * * *"
