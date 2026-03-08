@@ -58,39 +58,56 @@ velero:
           name: plugins
 
   schedules:
-    gitlab:
-      disabled: false
-      schedule: "0 0 * * *"
-      useOwnerReferencesInBackup: false
-      paused: false
-      skipImmediately: false
-      template:
-        ttl: "240h"
-        storageLocation: backup-storage
-        includedNamespaces:
-        - gitlab
-        defaultVolumesToFsBackup: true
-    vault:
-      disabled: false
-      schedule: "0 0 * * *"
-      useOwnerReferencesInBackup: false
-      paused: false
-      skipImmediately: false
-      template:
-        ttl: "240h"
-        storageLocation: backup-storage
-        includedNamespaces:
-        - vault
-        defaultVolumesToFsBackup: true
-    monitoring:
-      disabled: false
-      schedule: "0 0 * * *"
-      useOwnerReferencesInBackup: false
-      paused: false
-      skipImmediately: false
-      template:
-        ttl: "240h"
-        storageLocation: backup-storage
-        includedNamespaces:
-        - monitoring
-        defaultVolumesToFsBackup: true
+    daily-cluster-backup:
+    disabled: false
+    schedule: "0 11 * * *"
+    useOwnerReferencesInBackup: false
+    paused: false
+    skipImmediately: false
+    template:
+      ttl: "240h"
+      storageLocation: backup-storage
+      includedNamespaces:
+        - '*'
+      excludedNamespaces:
+        - kube-system
+        - velero
+      #excludedResources:
+      #  - secrets
+      defaultVolumesToFsBackup: true
+#    gitlab:
+#      disabled: false
+#      schedule: "0 0 * * *"
+#      useOwnerReferencesInBackup: false
+#      paused: false
+#      skipImmediately: false
+#      template:
+#        ttl: "240h"
+#        storageLocation: backup-storage
+#        includedNamespaces:
+#        - gitlab
+#        defaultVolumesToFsBackup: true
+#    vault:
+#      disabled: false
+#      schedule: "0 0 * * *"
+#      useOwnerReferencesInBackup: false
+#      paused: false
+#      skipImmediately: false
+#      template:
+#        ttl: "240h"
+#        storageLocation: backup-storage
+#        includedNamespaces:
+#        - vault
+#        defaultVolumesToFsBackup: true
+#    monitoring:
+#      disabled: false
+#      schedule: "0 0 * * *"
+#      useOwnerReferencesInBackup: false
+#      paused: false
+#      skipImmediately: false
+#      template:
+#        ttl: "240h"
+#        storageLocation: backup-storage
+#        includedNamespaces:
+#        - monitoring
+#        defaultVolumesToFsBackup: true
