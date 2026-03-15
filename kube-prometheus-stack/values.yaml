@@ -33,11 +33,11 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
 
-    envValueFrom:
-      loki_tenant:
-        secretKeyRef:
-          name: loki-auth-secret
-          key: tenant
+#    envValueFrom:
+#      loki_tenant:
+#        secretKeyRef:
+#          name: loki-auth-secret
+#          key: tenant
 
     extraSecretMounts:
       - name: loki-auth-secret
