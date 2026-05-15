@@ -33,6 +33,33 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
 
+    envValueFrom:
+      loki_tenant:
+        secretKeyRef:
+          name: grafana-loki-auth
+          key: tenant
+
+    extraSecretMounts:
+      - name: loki-auth-secret
+        secretName: grafana-loki-auth
+        defaultMode: 0440
+        mountPath: /etc/secrets/loki
+        readOnly: true
+
+    additionalDataSources:
+      - name: loki
+        access: proxy
+        type: loki
+        url: https://loki.unixworld.io
+        basicAuth: true
+        basicAuthUser: loki
+        jsonData:
+          httpHeaderName1: 'X-Scope-OrgID'
+        secureJsonData:
+          basicAuthPassword: $__file{/etc/secrets/loki/password}
+          #httpHeaderValue1: 'tenant1'
+          httpHeaderValue1: ${loki_tenant}
+
   prometheus-node-exporter:
     prometheus:
       monitor:
