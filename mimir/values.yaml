@@ -1,5 +1,6 @@
-structuredConfig:
-  multitenancy_enabled: true
+mimir:
+  structuredConfig:
+    multitenancy_enabled: true
 
 #alertmanager:
 #  persistentVolume:
