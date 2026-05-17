@@ -1,9 +1,5 @@
 ---
 kube-prometheus-stack:
-  prometheusSpec:
-    remoteWrite:
-      - url: https://mimir.unixworld.io/api/v1/push
-
   ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   ##
   grafana:
@@ -143,6 +139,8 @@ kube-prometheus-stack:
       enabled: false
 
     prometheusSpec:
+      remoteWrite:
+        - url: https://mimir.unixworld.io/api/v1/push
       additionalScrapeConfigs:
         - job_name: "node-exporter"
           static_configs:
