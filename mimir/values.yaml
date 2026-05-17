@@ -1,3 +1,6 @@
+structuredConfig:
+  multitenancy_enabled: true
+
 #alertmanager:
 #  persistentVolume:
 #    enabled: true
