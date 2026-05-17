@@ -62,7 +62,7 @@ kube-prometheus-stack:
       - name: mimir
         access: proxy
         type: prometheus
-        url: https://mimir.unixworld.io
+        url: https://mimir.unixworld.io/prometheus
 
   prometheus-node-exporter:
     prometheus:
