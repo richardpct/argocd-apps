@@ -59,6 +59,10 @@ kube-prometheus-stack:
           basicAuthPassword: $__file{/etc/secrets/loki/password}
           #httpHeaderValue1: 'tenant1'
           httpHeaderValue1: ${loki_tenant}
+      - name: mimir
+        access: proxy
+        type: prometheus
+        url: https://mimir.unixworld.io
 
   prometheus-node-exporter:
     prometheus:
