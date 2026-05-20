@@ -270,6 +270,23 @@ extraManifests:
           property: admin-password
     ---
     apiVersion: external-secrets.io/v1
+    kind: SecretStore
+    metadata:
+      name: vault-backend
+      namespace: monitoring
+    spec:
+      provider:
+        vault:
+          server: "http://vault.vault:8200"
+          path: "loki"
+          version: "v2"
+          auth:
+            tokenSecretRef:
+              name: "vault-token"
+              key: "token"
+              namespace: monitoring
+    ---
+    apiVersion: external-secrets.io/v1
     kind: ExternalSecret
     metadata:
       name: grafana-loki-auth
