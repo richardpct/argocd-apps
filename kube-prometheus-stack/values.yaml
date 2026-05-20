@@ -284,9 +284,9 @@ extraManifests:
       data:
       - secretKey: password
         remoteRef:
-          key: secret
+          key: loki
           property: password
       - secretKey: tenant
         remoteRef:
-          key: secret
+          key: loki
           property: tenant
