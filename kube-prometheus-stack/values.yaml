@@ -268,3 +268,25 @@ extraManifests:
         remoteRef:
           key: secret
           property: admin-password
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: grafana-loki-auth
+      namespace: monitoring
+    spec:
+      refreshInterval: "15s"
+      secretStoreRef:
+        name: vault-backend
+        kind: SecretStore
+      target:
+        name: grafana-loki-auth
+      data:
+      - secretKey: password
+        remoteRef:
+          key: secret
+          property: password
+      - secretKey: tenant
+        remoteRef:
+          key: secret
+          property: tenant
