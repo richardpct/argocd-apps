@@ -1,5 +1,4 @@
 ---
-metrics-server:
-  args:
-    - '--kubelet-insecure-tls=true'
-  replicas: 3
+args:
+  - '--kubelet-insecure-tls=true'
+replicas: 2
