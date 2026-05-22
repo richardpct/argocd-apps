@@ -1,19 +1,19 @@
-#apiVersion: gateway.networking.k8s.io/v1
-#kind: HTTPRoute
-#metadata:
-#  name: https-loki
-#  namespace: loki
-#spec:
-#  parentRefs:
-#  - name: tls-gateway
-#    namespace: kube-system
-#  hostnames:
-#  - loki.unixworld.io
-#  rules:
-#  - matches:
-#    - path:
-#        type: PathPrefix
-#        value: /
-#    backendRefs:
-#    - name: loki-gateway
-#      port: 80
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: https-docker-registry
+  namespace: docker-registry
+spec:
+  parentRefs:
+  - name: tls-gateway
+    namespace: kube-system
+  hostnames:
+  - registry.unixworld.io
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: docker-registry
+      port: 5000
