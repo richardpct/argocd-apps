@@ -28,7 +28,7 @@ global:
   common:
     labels: {}
 
-  image: {}
+  image:
     # Registry value override is only available for the following Charts:
     # - Spamcheck
     # - Mailroom
@@ -38,7 +38,7 @@ global:
     # Support for other charts is coming as an iterative rollout.
     # See https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2859
     # for more information.
-    # registry:
+    registry: registry.unixworld.io
 
     # pullPolicy: IfNotPresent
     # pullSecrets: []
