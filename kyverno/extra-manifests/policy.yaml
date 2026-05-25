@@ -23,9 +23,8 @@ spec:
           - list: "request.object.spec.containers"
             patchesJson6902: |-
               - op: replace
-                path: "/spec/containers/{{pathIndex}}/image"
-                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
-
+                path: "/spec/containers/{{elementIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
     - name: mutate-init-containers
       match:
         any:
@@ -39,7 +38,7 @@ spec:
                 - docker-registry
       preconditions:
         all:
-        - key: "{{ request.object.spec.initContainers[].name | length(@) }}"
+        - key: "{{ request.object.spec.initContainers || '[]' | length(@) }}"
           operator: GreaterThan
           value: 0
       mutate:
@@ -47,5 +46,5 @@ spec:
           - list: "request.object.spec.initContainers"
             patchesJson6902: |-
               - op: replace
-                path: "/spec/initContainers/{{pathIndex}}/image"
-                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
+                path: "/spec/initContainers/{{elementIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
