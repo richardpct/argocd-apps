@@ -1,14 +1,13 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: redirect-dockerhub-to-private-registry
+  name: redirect-to-proxy-cache
   annotations:
-    policies.kyverno.io/title: Redirect Docker Hub to Private Registry
-    policies.kyverno.io/category: Image Management
+    policies.kyverno.io/title: Redirect Docker Hub to Local Proxy Cache
 spec:
   background: false
   rules:
-    - name: rewrite-containers
+    - name: mutate-standard-containers
       match:
         any:
           - resources:
@@ -18,23 +17,16 @@ spec:
         any:
           - resources:
               namespaces:
-                - kube-system
-                - kyverno
                 - docker-registry
       mutate:
         foreach:
           - list: "request.object.spec.containers"
-            preconditions:
-              all:
-                - key: "{{ element.image }}"
-                  operator: Equals
-                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/.+', '{{element.image}}') }}"
-            patchStrategicMerge:
-              spec:
-                containers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/(?!.+/)', '{{element.image}}', 'registry.unixworld.io/library/') | regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '@', 'registry.unixworld.io/') }}"
-    - name: rewrite-init-containers
+            patchesJson6902: |-
+              - op: replace
+                path: "/spec/containers/{{pathIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
+
+    - name: mutate-init-containers
       match:
         any:
           - resources:
@@ -44,24 +36,16 @@ spec:
         any:
           - resources:
               namespaces:
-                - kube-system
-                - kyverno
                 - docker-registry
       preconditions:
         all:
-          - key: "{{ request.object.spec.initContainers || '' | length(@) }}"
-            operator: GreaterThan
-            value: 0
+        - key: "{{ request.object.spec.initContainers[].name | length(@) }}"
+          operator: GreaterThan
+          value: 0
       mutate:
         foreach:
           - list: "request.object.spec.initContainers"
-            preconditions:
-              all:
-                - key: "{{ element.image }}"
-                  operator: Equals
-                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/.+', '{{element.image}}') }}"
-            patchStrategicMerge:
-              spec:
-                initContainers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/(?!.+/)', '{{element.image}}', 'registry.unixworld.io/library/') | regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '@', 'registry.unixworld.io/') }}"
+            patchesJson6902: |-
+              - op: replace
+                path: "/spec/initContainers/{{pathIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
