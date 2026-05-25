@@ -7,7 +7,7 @@ metadata:
 spec:
   background: false
   rules:
-    - name: mutate-standard-containers
+    - name: mutate-all-images
       match:
         any:
           - resources:
@@ -21,30 +21,14 @@ spec:
       mutate:
         foreach:
           - list: "request.object.spec.containers"
-            patchesJson6902: |-
-              - op: replace
-                path: "/spec/containers/{{elementIndex}}/image"
-                value: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
-    - name: mutate-init-containers
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      exclude:
-        any:
-          - resources:
-              namespaces:
-                - docker-registry
-      preconditions:
-        all:
-        - key: "{{ request.object.spec.initContainers || '[]' | length(@) }}"
-          operator: GreaterThan
-          value: 0
-      mutate:
-        foreach:
-          - list: "request.object.spec.initContainers"
-            patchesJson6902: |-
-              - op: replace
-                path: "/spec/initContainers/{{elementIndex}}/image"
-                value: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
+            patchStrategicMerge:
+              spec:
+                containers:
+                  - (name): "{{ element.name }}"
+                    image: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
+          - list: "request.object.spec.initContainers || `[]`"
+            patchStrategicMerge:
+              spec:
+                initContainers:
+                  - (name): "{{ element.name }}"
+                    image: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') | regex_replace_all('^docker.io/', @, 'registry.unixworld.io/') | regex_replace_all('^([^/]+)$', @, 'registry.unixworld.io/library/${1}') | regex_replace_all('^([^/.]+/[^/]+)$', @, 'registry.unixworld.io/${1}') }}"
