@@ -7,7 +7,7 @@ metadata:
 spec:
   background: false
   rules:
-    - name: mutate-docker-hub-library
+    - name: mutate-standard-containers
       match:
         any:
           - resources:
@@ -21,18 +21,11 @@ spec:
       mutate:
         foreach:
           - list: "request.object.spec.containers"
-            patchStrategicMerge:
-              spec:
-                containers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') }}"
-          - list: "request.object.spec.initContainers || '[]'"
-            patchStrategicMerge:
-              spec:
-                initContainers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/([^/]+)$', element.image, 'registry.unixworld.io/library/${1}') }}"
-    - name: mutate-docker-hub-org
+            patchesJson6902: |-
+              - op: replace
+                path: "/spec/containers/{{pathIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
+    - name: mutate-init-containers
       match:
         any:
           - resources:
@@ -43,17 +36,15 @@ spec:
           - resources:
               namespaces:
                 - docker-registry
+      preconditions:
+        all:
+        - key: "{{ request.object.spec.initContainers[].name | length(@) }}"
+          operator: GreaterThan
+          value: 0
       mutate:
         foreach:
-          - list: "request.object.spec.containers"
-            patchStrategicMerge:
-              spec:
-                containers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/', element.image, 'registry.unixworld.io/') }}"
-          - list: "request.object.spec.initContainers || '[]'"
-            patchStrategicMerge:
-              spec:
-                initContainers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/', element.image, 'registry.unixworld.io/') }}"
+          - list: "request.object.spec.initContainers"
+            patchesJson6902: |-
+              - op: replace
+                path: "/spec/initContainers/{{pathIndex}}/image"
+                value: "{{ regex_replace_all('^docker.io/([^/]+)$', '{{element.image}}', 'registry.unixworld.io/library/${1}') || regex_replace_all('^docker.io/', '{{element.image}}', 'registry.unixworld.io/') }}"
