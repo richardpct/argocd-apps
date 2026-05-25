@@ -8,8 +8,7 @@ metadata:
 spec:
   background: false
   rules:
-    # Rule 1: docker.io/<image> (no namespace) -> registry.unixworld.io/library/<image>
-    - name: rewrite-dockerhub-library
+    - name: rewrite-containers
       match:
         any:
           - resources:
@@ -24,31 +23,18 @@ spec:
                 - docker-registry
       mutate:
         foreach:
-          - list: "request.object.spec.initContainers"
-            preconditions:
-              all:
-                - key: "{{ element.image }}"
-                  operator: Equals
-                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/[^/]+(:[^/]+)?$', '{{element.image}}') }}"
-            patchStrategicMerge:
-              spec:
-                initContainers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '{{element.image}}', 'registry.unixworld.io/library/') }}"
           - list: "request.object.spec.containers"
             preconditions:
               all:
                 - key: "{{ element.image }}"
                   operator: Equals
-                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/[^/]+(:[^/]+)?$', '{{element.image}}') }}"
+                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/.+', '{{element.image}}') }}"
             patchStrategicMerge:
               spec:
                 containers:
                   - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '{{element.image}}', 'registry.unixworld.io/library/') }}"
-
-    # Rule 2: docker.io/<namespace>/<image> -> registry.unixworld.io/<namespace>/<image>
-    - name: rewrite-dockerhub-namespaced
+                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/(?!.+/)', '{{element.image}}', 'registry.unixworld.io/library/') | regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '@', 'registry.unixworld.io/') }}"
+    - name: rewrite-init-containers
       match:
         any:
           - resources:
@@ -61,27 +47,21 @@ spec:
                 - kube-system
                 - kyverno
                 - docker-registry
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.initContainers || '' | length(@) }}"
+            operator: GreaterThan
+            value: 0
       mutate:
         foreach:
           - list: "request.object.spec.initContainers"
             preconditions:
               all:
-                - key: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/[^/]+/[^/]+', '{{element.image}}') }}"
+                - key: "{{ element.image }}"
                   operator: Equals
-                  value: true
+                  value: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/.+', '{{element.image}}') }}"
             patchStrategicMerge:
               spec:
                 initContainers:
                   - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '{{element.image}}', 'registry.unixworld.io/') }}"
-          - list: "request.object.spec.containers"
-            preconditions:
-              all:
-                - key: "{{ regex_match('^(docker\\.io|index\\.docker\\.io)/[^/]+/[^/]+', '{{element.image}}') }}"
-                  operator: Equals
-                  value: true
-            patchStrategicMerge:
-              spec:
-                containers:
-                  - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '{{element.image}}', 'registry.unixworld.io/') }}"
+                    image: "{{ regex_replace_all('^(docker\\.io|index\\.docker\\.io)/(?!.+/)', '{{element.image}}', 'registry.unixworld.io/library/') | regex_replace_all('^(docker\\.io|index\\.docker\\.io)/', '@', 'registry.unixworld.io/') }}"
