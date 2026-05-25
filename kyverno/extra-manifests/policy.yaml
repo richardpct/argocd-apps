@@ -25,7 +25,7 @@ spec:
               spec:
                 containers:
                   - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/', element.image, 'https://registry.unixworld.io') }}"
+                    image: "{{ regex_replace_all('^docker.io/', element.image, 'https://registry.unixworld.io/') }}"
     - name: mutate-init-containers
       match:
         any:
@@ -49,4 +49,4 @@ spec:
               spec:
                 initContainers:
                   - name: "{{ element.name }}"
-                    image: "{{ regex_replace_all('^docker.io/', element.image, 'https://registry.unixworld.io') }}"
+                    image: "{{ regex_replace_all('^docker.io/', element.image, 'https://registry.unixworld.io/') }}"
