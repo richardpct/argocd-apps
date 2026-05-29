@@ -194,7 +194,7 @@ extraManifests:
     kind: HTTPRoute
     metadata:
       name: https-grafana
-      namespace: monitoring
+      namespace: prometheus
     spec:
       parentRefs:
       - name: tls-gateway
@@ -214,7 +214,7 @@ extraManifests:
     kind: HTTPRoute
     metadata:
       name: https-prometheus
-      namespace: monitoring
+      namespace: prometheus
     spec:
       parentRefs:
       - name: tls-gateway
@@ -234,7 +234,7 @@ extraManifests:
     kind: SecretStore
     metadata:
       name: vault-backend
-      namespace: monitoring
+      namespace: prometheus
     spec:
       provider:
         vault:
@@ -245,13 +245,13 @@ extraManifests:
             tokenSecretRef:
               name: "vault-token"
               key: "token"
-              namespace: monitoring
+              namespace: prometheus
     ---
     apiVersion: external-secrets.io/v1
     kind: ExternalSecret
     metadata:
       name: grafana-admin-password
-      namespace: monitoring
+      namespace: prometheus
     spec:
       refreshInterval: "15s"
       secretStoreRef:
@@ -273,7 +273,7 @@ extraManifests:
     kind: ExternalSecret
     metadata:
       name: grafana-loki-auth
-      namespace: monitoring
+      namespace: prometheus
     spec:
       refreshInterval: "15s"
       secretStoreRef:
