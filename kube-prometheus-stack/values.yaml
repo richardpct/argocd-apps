@@ -233,17 +233,17 @@ extraManifests:
     apiVersion: external-secrets.io/v1
     kind: SecretStore
     metadata:
-      name: vault-backend
+      name: openbao-backend
       namespace: prometheus
     spec:
       provider:
         vault:
-          server: "http://vault.vault:8200"
+          server: "http://openbao.openbao:8200"
           path: "grafana"
           version: "v2"
           auth:
             tokenSecretRef:
-              name: "vault-token"
+              name: "openbao-token"
               key: "token"
               namespace: prometheus
     ---
@@ -255,7 +255,7 @@ extraManifests:
     spec:
       refreshInterval: "15s"
       secretStoreRef:
-        name: vault-backend
+        name: openbao-backend
         kind: SecretStore
       target:
         name: grafana-admin-password
@@ -277,7 +277,7 @@ extraManifests:
     spec:
       refreshInterval: "15s"
       secretStoreRef:
-        name: vault-backend
+        name: openbao-backend
         kind: SecretStore
       target:
         name: grafana-loki-auth
