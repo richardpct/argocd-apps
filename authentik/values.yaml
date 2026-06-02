@@ -25,4 +25,4 @@ server:
 postgresql:
   enabled: true
   auth:
-    password: "k5rrts+zIgTlQIFjxfGiS/t9sVj2piPiL0xgY"
+    password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
