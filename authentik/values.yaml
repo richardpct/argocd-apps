@@ -8,9 +8,9 @@ authentik:
  postgresql:
    password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
 
-#blueprints:
-#  configMaps:
-#    - grafana-blueprint.yaml
+blueprints:
+  configMaps:
+    - authentik-custom-blueprints
 
 server:
   route:
