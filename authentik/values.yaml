@@ -66,6 +66,9 @@ additionalObjects:
               client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
               client_secret: !Env [GRAFANA_CLIENT_SECRET, "tititutu"]
               client_type: "confidential"
+              grant_types:
+                - "authorization_code"
+                - "refresh_token"
               include_claims_in_id_token: true
               issuer_mode: "per_provider"
               sub_mode: "hashed_user_id"
