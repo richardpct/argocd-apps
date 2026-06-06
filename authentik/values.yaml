@@ -52,6 +52,7 @@ additionalObjects:
               username: "rpct"
             attrs:
               name: "rpct"
+              email: "rpct@unixworld.io"
               is_active: true
               path: "users"
               type: "internal"
