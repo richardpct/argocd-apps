@@ -4,7 +4,9 @@
 grafana:
   enabled: true
 
-  root_url: https://grafana.unixworld.io/
+  server:
+    domain: grafana.unixworld.io
+    root_url: https://grafana.unixworld.io/
 
   # TODO: temporary for testing
   assertNoLeakedSecrets: false
