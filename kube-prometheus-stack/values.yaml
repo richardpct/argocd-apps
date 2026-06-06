@@ -37,7 +37,6 @@ grafana:
       role_attribute_path: contains(entitlements, 'Grafana Admins') && 'Admin' || contains(entitlements, 'Grafana Editors') && 'Editor' || 'Viewer'
 
       send_client_credentials_via_post: true
-      use_pkce: true
       allow_assign_grafana_admin: true
 
   ingress:
