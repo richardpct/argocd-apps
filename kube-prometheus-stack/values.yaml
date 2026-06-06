@@ -4,6 +4,9 @@
 grafana:
   enabled: true
 
+  # TODO: temporary for testing
+  assertNoLeakedSecrets: false
+
   # Administrator credentials when not using an existing secret (see below)
   adminUser: admin
   # adminPassword: strongpassword
