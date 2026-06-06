@@ -38,6 +38,7 @@ grafana:
 
       send_client_credentials_via_post: true
       use_pkce: true
+      allow_assign_grafana_admin: true
 
   ingress:
     ## If true, Grafana Ingress will be created
