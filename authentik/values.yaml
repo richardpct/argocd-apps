@@ -45,7 +45,7 @@ additionalObjects:
           - model: authentik_rbac.role
             state: present
             identifiers:
-              name: "Grafana Admin"
+              name: "Grafana Admins"
           - model: authentik_core.user
             state: present
             identifiers:
@@ -57,7 +57,7 @@ additionalObjects:
               type: "internal"
               password: !Env [RPCT_PASSWORD, "tototata"]
               roles:
-                - !Find [authentik_rbac.role, [name, "Grafana Admin"]]
+                - !Find [authentik_rbac.role, [name, "Grafana Admins"]]
           - model: authentik_providers_oauth2.oauth2provider
             state: present
             identifiers:
