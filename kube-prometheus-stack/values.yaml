@@ -4,10 +4,6 @@
 grafana:
   enabled: true
 
-  server:
-    domain: grafana.unixworld.io
-    root_url: https://grafana.unixworld.io/
-
   # TODO: temporary for testing
   assertNoLeakedSecrets: false
 
@@ -23,6 +19,9 @@ grafana:
     passwordKey: admin-password
 
   grafana.ini:
+    server:
+      domain: grafana.unixworld.io
+      root_url: https://grafana.unixworld.io/
     auth:
       signout_redirect_url: "https://authentik.company/application/o/grafana/end-session/"
       oauth_auto_login: true
