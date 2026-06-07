@@ -5,8 +5,8 @@ grafana:
   enabled: true
 
   extraSecretMounts:
-    - name: grafana
-      secretName: grafana
+    - name: grafana-admin-password
+      secretName: grafana-admin-password
       defaultMode: 0440
       mountPath: /etc/secrets/authentik
       readOnly: true
