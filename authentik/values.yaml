@@ -59,14 +59,14 @@ additionalObjects:
               is_active: true
               path: "users"
               type: "internal"
-              password: !Env [RPCT_PASSWORD, "tototata"]
+              password: !Env [GRAFANA_PASSWORD, "ChangeMe"]
           - model: authentik_providers_oauth2.oauth2provider
             state: present
             identifiers:
               name: "Provider for grafana"
             attrs:
               client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
-              client_secret: !Env [GRAFANA_CLIENT_SECRET, "tititutu"]
+              client_secret: !Env [GRAFANA_CLIENT_SECRET, "ChangeMe"]
               client_type: "confidential"
               grant_types:
                 - "authorization_code"

@@ -4,6 +4,13 @@
 grafana:
   enabled: true
 
+  extraSecretMounts:
+    - name: grafana
+      secretName: grafana
+      defaultMode: 0440
+      mountPath: /etc/secrets/authentik
+      readOnly: true
+
   # TODO: temporary for testing
   assertNoLeakedSecrets: false
 
@@ -29,7 +36,7 @@ grafana:
       name: authentik
       enabled: true
       client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
-      client_secret: "tititutu"
+      client_secret: $__file{/etc/secrets/authentik/authentik_grafana_client_secret}
       scopes: "openid profile email entitlements"
       auth_url: "https://authentik.unixworld.io/application/o/authorize/"
       token_url: "https://authentik.unixworld.io/application/o/token/"
@@ -292,6 +299,10 @@ extraManifests:
         remoteRef:
           key: secret
           property: admin-password
+      - secretKey: authentik_grafana_client_secret
+        remoteRef:
+          key: secret
+          property: authentik_grafana_client_secret
     ---
     apiVersion: external-secrets.io/v1
     kind: ExternalSecret
