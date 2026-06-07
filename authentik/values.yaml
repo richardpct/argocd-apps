@@ -1,6 +1,6 @@
 ---
 authentik:
- secret_key: "WL5lg3Cv38DM3f9eGDbLi4ekp/2uws"
+ #secret_key: "WL5lg3Cv38DM3f9eGDbLi4ekp/2uws"
  # This sends anonymous usage-data, stack traces on errors and
  # performance data to sentry.io, and is fully opt-in
  error_reporting:
