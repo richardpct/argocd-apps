@@ -25,6 +25,14 @@ server:
             type: PathPrefix
             value: /
 
+worker:
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secret
+          key: AUTHENTIK_POSTGRESQL__PASSWORD
+
 postgresql:
   enabled: true
 
