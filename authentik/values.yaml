@@ -1,4 +1,9 @@
 ---
+global:
+  envFrom:
+    - secretRef:
+        name: "authentik-secret"
+
 authentik:
   existingSecret:
     secretName: "authentik-secret"
@@ -25,14 +30,6 @@ server:
             type: PathPrefix
             value: /
 
-#worker:
-#  env:
-#    - name: AUTHENTIK_POSTGRESQL__PASSWORD
-#      valueFrom:
-#        secretKeyRef:
-#          name: authentik-secret
-#          key: AUTHENTIK_POSTGRESQL__PASSWORD
-
 postgresql:
   enabled: true
 
@@ -40,7 +37,6 @@ postgresql:
     existingSecret: "authentik-secret"
     secretKeys:
       userPasswordKey: "AUTHENTIK_POSTGRESQL__PASSWORD"
-    #password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
 
 additionalObjects:
   - apiVersion: v1
