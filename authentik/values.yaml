@@ -37,7 +37,10 @@ postgresql:
   enabled: true
 
   auth:
-    password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
+    existingSecret: "authentik-secret"
+    secretKeys:
+      userPasswordKey: "AUTHENTIK_POSTGRESQL__PASSWORD"
+    #password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
 
 additionalObjects:
   - apiVersion: v1
