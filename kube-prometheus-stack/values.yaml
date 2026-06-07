@@ -23,7 +23,7 @@ grafana:
       domain: grafana.unixworld.io
       root_url: https://grafana.unixworld.io/
     auth:
-      signout_redirect_url: "https://authentik.company/application/o/grafana/end-session/"
+      signout_redirect_url: "https://authentik.unixworld.io/application/o/grafana/end-session/"
       oauth_auto_login: true
     auth.generic_oauth:
       name: authentik

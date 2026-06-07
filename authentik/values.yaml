@@ -42,10 +42,6 @@ additionalObjects:
         metadata:
           name: "Grafana"
         entries:
-          - model: authentik_rbac.role
-            state: present
-            identifiers:
-              name: "Grafana Admins"
           - model: authentik_core.user
             state: present
             identifiers:
@@ -57,8 +53,6 @@ additionalObjects:
               path: "users"
               type: "internal"
               password: !Env [RPCT_PASSWORD, "tototata"]
-              roles:
-                - !Find [authentik_rbac.role, [name, "Grafana Admins"]]
           - model: authentik_providers_oauth2.oauth2provider
             state: present
             identifiers:
@@ -96,3 +90,24 @@ additionalObjects:
               open_in_new_tab: false
               policy_engine_mode: "any"
               provider: !Find [authentik_providers_oauth2.oauth2provider, [name, "Provider for grafana"]]
+          - model: authentik_core.applicationentitlement
+            state: present
+            identifiers:
+              name: "Grafana Admins"
+              app: !Find [authentik_core.application, [slug, "grafana"]]
+            attrs:
+              name: "Grafana Admins"
+          - model: authentik_core.applicationentitlement
+            state: present
+            identifiers:
+              name: "Grafana Editors"
+              app: !Find [authentik_core.application, [slug, "grafana"]]
+            attrs:
+              name: "Grafana Editors"
+          - model: authentik_policies.policybinding
+            state: present
+            identifiers:
+              target: !Find [authentik_core.applicationentitlement, [name, "Grafana Admins"], [app, !Find [authentik_core.application, [slug, "grafana"]]]]
+              user: !Find [authentik_core.user, [username, "rpct"]]
+            attrs:
+              order: 0
