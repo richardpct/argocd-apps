@@ -6,8 +6,8 @@ authentik:
   # performance data to sentry.io, and is fully opt-in
   error_reporting:
     enabled: true
-  postgresql:
-    password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
+  #postgresql:
+  #  password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
 
 blueprints:
   configMaps:
