@@ -1,12 +1,13 @@
 ---
 authentik:
- #secret_key: "WL5lg3Cv38DM3f9eGDbLi4ekp/2uws"
- # This sends anonymous usage-data, stack traces on errors and
- # performance data to sentry.io, and is fully opt-in
- error_reporting:
-   enabled: true
- postgresql:
-   password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
+  existingSecret:
+    secretName: "authentik-secret"
+  # This sends anonymous usage-data, stack traces on errors and
+  # performance data to sentry.io, and is fully opt-in
+  error_reporting:
+    enabled: true
+  postgresql:
+    password: "2V/Z2Qfrn2Mx87cL006wDd50AFEdbCEhV"
 
 blueprints:
   configMaps:
