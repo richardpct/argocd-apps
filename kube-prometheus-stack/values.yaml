@@ -4,20 +4,6 @@
 grafana:
   enabled: true
 
-  # TODO: temporary for testing
-  #assertNoLeakedSecrets: false
-
-  # Administrator credentials when not using an existing secret (see below)
-  #adminUser: admin
-  # adminPassword: strongpassword
-
-  # Use an existing secret for the admin user.
-  #admin:
-  #  ## Name of the secret. Can be templated.
-  #  existingSecret: grafana-admin-password
-  #  userKey: admin-user
-  #  passwordKey: admin-password
-
   grafana.ini:
     server:
       domain: grafana.unixworld.io
@@ -36,12 +22,7 @@ grafana:
       api_url: "https://authentik.unixworld.io/application/o/userinfo/"
       role_attribute_path: contains(entitlements, 'Grafana Admins') && 'Admin' || contains(entitlements, 'Grafana Editors') && 'Editor' || 'Viewer'
 
-      #role_attribute_strict: true
-      #allow_assign_grafana_admin: true
-
   ingress:
-    ## If true, Grafana Ingress will be created
-    ##
     enabled: false
 
   # # To make Grafana persistent (Using Statefulset)
@@ -85,7 +66,6 @@ grafana:
         httpHeaderName1: 'X-Scope-OrgID'
       secureJsonData:
         basicAuthPassword: $__file{/etc/secrets/loki/password}
-        #httpHeaderValue1: 'tenant1'
         httpHeaderValue1: ${loki_tenant}
     - name: mimir
       access: proxy
