@@ -29,8 +29,8 @@ grafana:
       name: authentik
       enabled: true
       client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
-      #client_secret: $__file{/etc/secrets/authentik/authentik_grafana_client_secret}
-      client_secret: "tititoto"
+      client_secret: $__file{/etc/secrets/authentik/authentik_grafana_client_secret}
+      #client_secret: "tititoto"
       scopes: "openid profile email entitlements"
       auth_url: "https://authentik.unixworld.io/application/o/authorize/"
       token_url: "https://authentik.unixworld.io/application/o/token/"
