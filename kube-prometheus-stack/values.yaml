@@ -289,14 +289,6 @@ extraManifests:
       target:
         name: grafana-admin-password
       data:
-      - secretKey: admin-user
-        remoteRef:
-          key: secret
-          property: admin-user
-      - secretKey: admin-password
-        remoteRef:
-          key: secret
-          property: admin-password
       - secretKey: authentik_grafana_client_secret
         remoteRef:
           key: secret
