@@ -12,11 +12,11 @@ grafana:
   # adminPassword: strongpassword
 
   # Use an existing secret for the admin user.
-  admin:
-    ## Name of the secret. Can be templated.
-    existingSecret: grafana-admin-password
-    userKey: admin-user
-    passwordKey: admin-password
+  #admin:
+  #  ## Name of the secret. Can be templated.
+  #  existingSecret: grafana-admin-password
+  #  userKey: admin-user
+  #  passwordKey: admin-password
 
   grafana.ini:
     server:
@@ -30,7 +30,6 @@ grafana:
       enabled: true
       client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
       client_secret: $__file{/etc/secrets/authentik/authentik_grafana_client_secret}
-      #client_secret: "tititoto"
       scopes: "openid profile email entitlements"
       auth_url: "https://authentik.unixworld.io/application/o/authorize/"
       token_url: "https://authentik.unixworld.io/application/o/token/"
