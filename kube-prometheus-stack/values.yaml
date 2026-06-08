@@ -4,13 +4,6 @@
 grafana:
   enabled: true
 
-  extraSecretMounts:
-    - name: grafana-admin-password
-      secretName: grafana-admin-password
-      defaultMode: 0440
-      mountPath: /etc/secrets/authentik
-      readOnly: true
-
   # TODO: temporary for testing
   assertNoLeakedSecrets: false
 
@@ -75,6 +68,11 @@ grafana:
       secretName: grafana-loki-auth
       defaultMode: 0440
       mountPath: /etc/secrets/loki
+      readOnly: true
+    - name: grafana-admin-password
+      secretName: grafana-admin-password
+      defaultMode: 0440
+      mountPath: /etc/secrets/authentik
       readOnly: true
 
   additionalDataSources:
