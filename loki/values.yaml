@@ -22,9 +22,7 @@ loki:
 gateway:
   basicAuth:
     enabled: true
-    username: loki
-    # TODO: Create a secret instead
-    password: "password123"
+    existingSecret: loki-secret
 
 minio:
   enabled: true
