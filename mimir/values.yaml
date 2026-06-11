@@ -146,7 +146,3 @@ gateway:
     requests:
       cpu: 1
       memory: 512Mi
-  nginx:
-    basicAuth:
-      enabled: true
-      existingSecret: "mimir-secret"
