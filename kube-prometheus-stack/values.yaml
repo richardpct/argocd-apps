@@ -49,6 +49,11 @@ grafana:
       defaultMode: 0440
       mountPath: /etc/secrets/loki
       readOnly: true
+    - name: mimir-auth-secret
+      secretName: mimir-auth
+      defaultMode: 0440
+      mountPath: /etc/secrets/mimir
+      readOnly: true
     - name: grafana-admin-password
       secretName: grafana-admin-password
       defaultMode: 0440
@@ -71,6 +76,10 @@ grafana:
       access: proxy
       type: prometheus
       url: https://mimir.unixworld.io/prometheus
+      basicAuth: true
+      basicAuthUser: mimir
+      secureJsonData:
+        basicAuthPassword: $__file{/etc/secrets/mimir/password}
 
 prometheus-node-exporter:
   prometheus:
@@ -295,3 +304,21 @@ extraManifests:
         remoteRef:
           key: loki
           property: tenant
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: mimir-auth
+      namespace: prometheus
+    spec:
+      refreshInterval: "15s"
+      secretStoreRef:
+        name: openbao-backend
+        kind: SecretStore
+      target:
+        name: mimir-auth
+      data:
+      - secretKey: password
+        remoteRef:
+          key: mimir
+          property: password
