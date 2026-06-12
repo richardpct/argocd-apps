@@ -78,8 +78,11 @@ grafana:
       url: https://mimir.unixworld.io/prometheus
       basicAuth: true
       basicAuthUser: mimir
+      jsonData:
+        httpHeaderName1: 'X-Scope-OrgID'
       secureJsonData:
         basicAuthPassword: $__file{/etc/secrets/mimir/password}
+        httpHeaderValue1: "tenant1"
 
 prometheus-node-exporter:
   prometheus:
