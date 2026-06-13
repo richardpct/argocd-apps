@@ -58,14 +58,18 @@ alloy:
         }
       }
 
-extraVolumes:
-  - name: loki-auth
-    secret:
-      secretName: "loki-auth"
-extraVolumeMounts:
-  - name: loki-auth
-    mountPath: "/etc/secrets/loki"
-    readOnly: true
+  mounts:
+    extra:
+      - name: loki-auth-volume
+        mountPath: "/etc/secrets/loki"
+        readOnly: true
+
+controller:
+  volumes:
+    extra:
+      - name: loki-auth-volume
+        secret:
+          secretName: "loki-auth"
 
 rbac:
   create: true
