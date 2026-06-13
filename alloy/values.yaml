@@ -8,10 +8,6 @@ alloy:
         format = "logfmt"
       }
 
-      local.file "loki_username" {
-        filename  = "/etc/secrets/loki/username"
-      }
-
       local.file "loki_password" {
         filename  = "/etc/secrets/loki/password"
         is_secret = true 
