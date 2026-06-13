@@ -162,11 +162,11 @@ prometheus:
   prometheusSpec:
     remoteWrite:
       - url: https://mimir.unixworld.io/api/v1/push
-        basic_auth:
-          username: mimir
-          password:
-            name: mimir-auth
-            key: password
+        #basic_auth:
+        #  username: "mimir"
+        #  password:
+        #    name: "mimir-auth"
+        #    key: "password"
     additionalScrapeConfigs:
       - job_name: "node-exporter"
         static_configs:
