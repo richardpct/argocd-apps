@@ -1,4 +1,4 @@
 ---
 args:
   - '--kubelet-insecure-tls=true'
-replicas: 2
+replicas: 1
