@@ -264,7 +264,7 @@ extraManifests:
       provider:
         vault:
           server: "http://openbao.openbao:8200"
-          path: "grafana"
+          path: "prometheus"
           version: "v2"
           auth:
             tokenSecretRef:
