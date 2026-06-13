@@ -56,7 +56,7 @@ alloy:
           tenant_id = "tenant1"
 
           basic_auth {
-            username = local.file.loki_username.content
+            username = "loki"
             password = local.file.loki_password.content
           }
         }
