@@ -8,6 +8,15 @@ alloy:
         format = "logfmt"
       }
 
+      local.file "loki_username" {
+        filename  = "/etc/secrets/loki/username"
+      }
+
+      local.file "loki_password" {
+        filename  = "/etc/secrets/loki/password"
+        is_secret = true 
+      }
+
       // --- A. DISCOVER KUBERNETES PODS ---
       discovery.kubernetes "pods" {
         role = "pod"
@@ -45,11 +54,22 @@ alloy:
         endpoint {
           url = "https://loki.unixworld.io/loki/api/v1/push"
           tenant_id = "tenant1"
+
           basic_auth {
-          username = "loki"
-          password = "password123"
+            username = local.file.loki_username.content
+            password = local.file.loki_password.content
           }
         }
       }
+
+extraVolumes:
+  - name: loki-auth
+    secret:
+      secretName: "loki-auth"
+extraVolumeMounts:
+  - name: loki-auth
+    mountPath: "/etc/secrets/loki"
+    readOnly: true
+
 rbac:
   create: true
