@@ -162,10 +162,10 @@ prometheus:
   prometheusSpec:
     remoteWrite:
       - url: https://mimir.unixworld.io/api/v1/push
-        basic_auth:
+        basicAuth:
           username:
             name: "mimir-auth"
-            key: password
+            key: username
           password:
             name: "mimir-auth"
             key: password
