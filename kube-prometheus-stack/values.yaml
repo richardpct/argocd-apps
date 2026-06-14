@@ -1,226 +1,335 @@
 ---
-kube-prometheus-stack:
-  ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
-  ##
-  grafana:
-    enabled: true
+## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+##
+grafana:
+  enabled: true
 
-    # Administrator credentials when not using an existing secret (see below)
-    adminUser: admin
-    # adminPassword: strongpassword
-
-    # Use an existing secret for the admin user.
-    admin:
-      ## Name of the secret. Can be templated.
-      existingSecret: grafana-admin-password
-      userKey: admin-user
-      passwordKey: admin-password
-
-    ingress:
-      ## If true, Grafana Ingress will be created
-      ##
-      enabled: false
-
-    # # To make Grafana persistent (Using Statefulset)
-    # #
-    persistence:
+  grafana.ini:
+    server:
+      domain: grafana.unixworld.io
+      root_url: https://grafana.unixworld.io/
+    auth:
+      signout_redirect_url: "https://authentik.unixworld.io/application/o/grafana/end-session/"
+      oauth_auto_login: true
+    auth.generic_oauth:
+      name: authentik
       enabled: true
-      type: sts
-      #storageClassName: "storageClassName"
-      accessModes:
-        - ReadWriteOnce
-      size: 20Gi
-      finalizers:
-        - kubernetes.io/pvc-protection
+      client_id: "6gaswM7ilnnoiWPuihRR3poiboJw8ii2wSmfrbHO"
+      client_secret: $__file{/etc/secrets/authentik/authentik_grafana_client_secret}
+      scopes: "openid profile email entitlements"
+      auth_url: "https://authentik.unixworld.io/application/o/authorize/"
+      token_url: "https://authentik.unixworld.io/application/o/token/"
+      api_url: "https://authentik.unixworld.io/application/o/userinfo/"
+      role_attribute_path: contains(entitlements, 'Grafana Admins') && 'Admin' || contains(entitlements, 'Grafana Editors') && 'Editor' || 'Viewer'
 
-    envValueFrom:
-      loki_tenant:
-        secretKeyRef:
-          name: grafana-loki-auth
-          key: tenant
+  ingress:
+    enabled: false
 
-    extraSecretMounts:
-      - name: loki-auth-secret
-        secretName: grafana-loki-auth
-        defaultMode: 0440
-        mountPath: /etc/secrets/loki
-        readOnly: true
-
-    additionalDataSources:
-      - name: loki
-        access: proxy
-        type: loki
-        url: https://loki.unixworld.io
-        basicAuth: true
-        basicAuthUser: loki
-        jsonData:
-          httpHeaderName1: 'X-Scope-OrgID'
-        secureJsonData:
-          basicAuthPassword: $__file{/etc/secrets/loki/password}
-          #httpHeaderValue1: 'tenant1'
-          httpHeaderValue1: ${loki_tenant}
-
-  prometheus-node-exporter:
-    prometheus:
-      monitor:
-        relabelings:
-          - sourceLabels: [__meta_kubernetes_pod_node_name]
-            separator: ;
-            regex: ^(.*)$
-            targetLabel: instance
-            replacement: $1
-            action: replace
-
-  kubeControllerManager:
-    serviceMonitor:
-      relabelings:
-        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
-          separator: ;
-          regex: ^(.*)$
-          targetLabel: instance
-          replacement: $1
-          action: replace
-
-  kubeScheduler:
-    serviceMonitor:
-      relabelings:
-        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
-          separator: ;
-          regex: ^(.*)$
-          targetLabel: instance
-          replacement: $1
-          action: replace
-
-  kubelet:
-    serviceMonitor:
-      relabelings:
-        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
-          separator: ;
-          regex: ^(.*)$
-          targetLabel: instance
-          replacement: $1
-          action: replace
-
-  kubeEtcd:
-    serviceMonitor:
-      relabelings:
-        - sourceLabels: [__meta_kubernetes_endpoint_node_name]
-          separator: ;
-          regex: ^(.*)$
-          targetLabel: instance
-          replacement: $1
-          action: replace
-
-  kubeApiServer:
-    serviceMonitor:
-      relabelings:
-        - sourceLabels: [__address__]
-          regex: 192\.168\.1\.111:6443
-          targetLabel: instance
-          replacement: k8s-control-plane-01
-          action: replace
-        - sourceLabels: [__address__]
-          regex: 192\.168\.1\.112:6443
-          targetLabel: instance
-          replacement: k8s-control-plane-02
-          action: replace
-        - sourceLabels: [__address__]
-          regex: 192\.168\.1\.113:6443
-          targetLabel: instance
-          replacement: k8s-control-plane-03
-          action: replace
-
-  ## Deploy a Prometheus instance
-  ##
-  prometheus:
+  # # To make Grafana persistent (Using Statefulset)
+  # #
+  persistence:
     enabled: true
+    type: sts
+    #storageClassName: "storageClassName"
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
 
-    ingress:
-      enabled: false
+  envValueFrom:
+    loki_tenant:
+      secretKeyRef:
+        name: grafana-loki-auth
+        key: tenant
 
-    prometheusSpec:
-      additionalScrapeConfigs:
-        - job_name: "node-exporter"
-          static_configs:
-            - targets:
-                - "192.168.1.21:9100"
-                - "192.168.1.22:9100"
-                - "192.168.1.23:9100"
-                - "192.168.1.131:9100"
-          relabel_configs:
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.21:9100
-              target_label: instance
-              replacement: pve01
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.22:9100
-              target_label: instance
-              replacement: pve02
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.23:9100
-              target_label: instance
-              replacement: pve03
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.131:9100
-              target_label: instance
-              replacement: load-balancer-01
-        - job_name: 'load-balancer-metrics'
-          static_configs:
-            - targets:
-                - "192.168.1.131:8405"
-          relabel_configs:
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.131:8405
-              target_label: instance
-              replacement: load-balancer-01
-        - job_name: 'ceph'
-          static_configs:
-            - targets:
-                - "192.168.1.20:9283"
-          relabel_configs:
-            - source_labels: [__address__]
-              regex: 192\.168\.1\.21:9283
-              target_label: instance
-              replacement: pve01
+  extraSecretMounts:
+    - name: loki-auth-secret
+      secretName: grafana-loki-auth
+      defaultMode: 0440
+      mountPath: /etc/secrets/loki
+      readOnly: true
+    - name: mimir-auth-secret
+      secretName: mimir-auth
+      defaultMode: 0440
+      mountPath: /etc/secrets/mimir
+      readOnly: true
+    - name: grafana-admin-password
+      secretName: grafana-admin-password
+      defaultMode: 0440
+      mountPath: /etc/secrets/authentik
+      readOnly: true
 
-  extraManifests:
-    - |
-      apiVersion: gateway.networking.k8s.io/v1
-      kind: HTTPRoute
-      metadata:
-        name: https-grafana
-        namespace: monitoring
-      spec:
-        parentRefs:
-        - name: tls-gateway
-          namespace: kube-system
-        hostnames:
-        - "grafana.unixworld.io"
-        rules:
-        - matches:
-          - path:
-              type: PathPrefix
-              value: /
-          backendRefs:
-          - name: kube-prometheus-stack-grafana
-            port: 80
-      ---
-      apiVersion: gateway.networking.k8s.io/v1
-      kind: HTTPRoute
-      metadata:
-        name: https-prometheus
-        namespace: monitoring
-      spec:
-        parentRefs:
-        - name: tls-gateway
-          namespace: kube-system
-        hostnames:
-        - "prometheus.unixworld.io"
-        rules:
-        - matches:
-          - path:
-              type: PathPrefix
-              value: /
-          backendRefs:
-          - name: kube-prometheus-stack-prometheus
-            port: 9090
+  additionalDataSources:
+    - name: loki
+      access: proxy
+      type: loki
+      url: https://loki.unixworld.io
+      basicAuth: true
+      basicAuthUser: loki
+      jsonData:
+        httpHeaderName1: 'X-Scope-OrgID'
+      secureJsonData:
+        basicAuthPassword: $__file{/etc/secrets/loki/password}
+        httpHeaderValue1: ${loki_tenant}
+    - name: mimir
+      access: proxy
+      type: prometheus
+      url: https://mimir.unixworld.io/prometheus
+      basicAuth: true
+      basicAuthUser: mimir
+      secureJsonData:
+        basicAuthPassword: $__file{/etc/secrets/mimir/password}
+
+prometheus-node-exporter:
+  prometheus:
+    monitor:
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+kubeControllerManager:
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: instance
+        replacement: $1
+        action: replace
+
+kubeScheduler:
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: instance
+        replacement: $1
+        action: replace
+
+kubelet:
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: instance
+        replacement: $1
+        action: replace
+
+kubeEtcd:
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: instance
+        replacement: $1
+        action: replace
+
+kubeApiServer:
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [__address__]
+        regex: 192\.168\.1\.111:6443
+        targetLabel: instance
+        replacement: k8s-control-plane-01
+        action: replace
+      - sourceLabels: [__address__]
+        regex: 192\.168\.1\.112:6443
+        targetLabel: instance
+        replacement: k8s-control-plane-02
+        action: replace
+      - sourceLabels: [__address__]
+        regex: 192\.168\.1\.113:6443
+        targetLabel: instance
+        replacement: k8s-control-plane-03
+        action: replace
+
+## Deploy a Prometheus instance
+##
+prometheus:
+  enabled: true
+
+  ingress:
+    enabled: false
+
+  prometheusSpec:
+    remoteWrite:
+      - url: https://mimir.unixworld.io/api/v1/push
+        basicAuth:
+          username:
+            name: "mimir-auth"
+            key: username
+          password:
+            name: "mimir-auth"
+            key: password
+    additionalScrapeConfigs:
+      - job_name: "node-exporter"
+        static_configs:
+          - targets:
+              - "192.168.1.21:9100"
+              - "192.168.1.22:9100"
+              - "192.168.1.23:9100"
+              - "192.168.1.131:9100"
+        relabel_configs:
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.21:9100
+            target_label: instance
+            replacement: pve01
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.22:9100
+            target_label: instance
+            replacement: pve02
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.23:9100
+            target_label: instance
+            replacement: pve03
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.131:9100
+            target_label: instance
+            replacement: load-balancer-01
+      - job_name: 'load-balancer-metrics'
+        static_configs:
+          - targets:
+              - "192.168.1.131:8405"
+        relabel_configs:
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.131:8405
+            target_label: instance
+            replacement: load-balancer-01
+      - job_name: 'ceph'
+        static_configs:
+          - targets:
+              - "192.168.1.20:9283"
+        relabel_configs:
+          - source_labels: [__address__]
+            regex: 192\.168\.1\.21:9283
+            target_label: instance
+            replacement: pve01
+
+extraManifests:
+  - |
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: https-grafana
+      namespace: prometheus
+    spec:
+      parentRefs:
+      - name: tls-gateway
+        namespace: kube-system
+      hostnames:
+      - "grafana.unixworld.io"
+      rules:
+      - matches:
+        - path:
+            type: PathPrefix
+            value: /
+        backendRefs:
+        - name: kube-prometheus-stack-grafana
+          port: 80
+    ---
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: https-prometheus
+      namespace: prometheus
+    spec:
+      parentRefs:
+      - name: tls-gateway
+        namespace: kube-system
+      hostnames:
+      - "prometheus.unixworld.io"
+      rules:
+      - matches:
+        - path:
+            type: PathPrefix
+            value: /
+        backendRefs:
+        - name: kube-prometheus-stack-prometheus
+          port: 9090
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: SecretStore
+    metadata:
+      name: openbao-backend
+      namespace: prometheus
+    spec:
+      provider:
+        vault:
+          server: "http://openbao.openbao:8200"
+          path: "prometheus"
+          version: "v2"
+          auth:
+            tokenSecretRef:
+              name: "openbao-token"
+              key: "token"
+              namespace: prometheus
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: grafana-admin-password
+      namespace: prometheus
+    spec:
+      refreshInterval: "15s"
+      secretStoreRef:
+        name: openbao-backend
+        kind: SecretStore
+      target:
+        name: grafana-admin-password
+      data:
+      - secretKey: authentik_grafana_client_secret
+        remoteRef:
+          key: grafana
+          property: authentik_grafana_client_secret
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: grafana-loki-auth
+      namespace: prometheus
+    spec:
+      refreshInterval: "15s"
+      secretStoreRef:
+        name: openbao-backend
+        kind: SecretStore
+      target:
+        name: grafana-loki-auth
+      data:
+      - secretKey: password
+        remoteRef:
+          key: loki
+          property: password
+      - secretKey: tenant
+        remoteRef:
+          key: loki
+          property: tenant
+    ---
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: mimir-auth
+      namespace: prometheus
+    spec:
+      refreshInterval: "15s"
+      secretStoreRef:
+        name: openbao-backend
+        kind: SecretStore
+      target:
+        name: mimir-auth
+      data:
+      - secretKey: username
+        remoteRef:
+          key: mimir
+          property: username
+      - secretKey: password
+        remoteRef:
+          key: mimir
+          property: password

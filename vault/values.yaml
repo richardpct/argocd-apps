@@ -1,7 +1,0 @@
----
-vault:
-  server:
-    dev:
-      enabled: true
-    dataStorage:
-      enabled: false

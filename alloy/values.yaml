@@ -1,56 +1,75 @@
 ---
 alloy:
-  alloy:
-    configMap:
-      create: true
-      content: |
-        logging {
-          level = "info"
-          format = "logfmt"
-        }
-
-        // --- A. DISCOVER KUBERNETES PODS ---
-        discovery.kubernetes "pods" {
-          role = "pod"
-        }
-
-        // --- B. CLEAN UP LABELS ---
-        // This translates long Kubernetes metadata into clean Grafana labels
-        discovery.relabel "pod_logs" {
-          targets = discovery.kubernetes.pods.targets
-          rule {
-            source_labels = ["__meta_kubernetes_namespace"]
-            action        = "replace"
-            target_label  = "namespace"
-          }
-          rule {
-            source_labels = ["__meta_kubernetes_pod_name"]
-            action        = "replace"
-            target_label  = "pod"
-          }
-          rule {
-            source_labels = ["__meta_kubernetes_pod_container_name"]
-            action        = "replace"
-            target_label  = "container"
-          }
-        }
-
-        // --- C. READ THE LOG FILES ---
-        loki.source.kubernetes "pods" {
-          targets    = discovery.relabel.pod_logs.output
-          forward_to = [loki.write.loki_gateway.receiver]
-        }
-
-        // --- D. SEND TO LOKI GATEWAY ---
-        loki.write "loki_gateway" {
-          endpoint {
-            url = "https://loki.unixworld.io/loki/api/v1/push"
-            tenant_id = "tenant1"
-            basic_auth {
-            username = "loki"
-            password = "password123"
-            }
-          }
-        }
-  rbac:
+  configMap:
     create: true
+    content: |
+      logging {
+        level = "info"
+        format = "logfmt"
+      }
+
+      local.file "loki_password" {
+        filename  = "/etc/secrets/loki/password"
+        is_secret = true 
+      }
+
+      // --- A. DISCOVER KUBERNETES PODS ---
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      // --- B. CLEAN UP LABELS ---
+      // This translates long Kubernetes metadata into clean Grafana labels
+      discovery.relabel "pod_logs" {
+        targets = discovery.kubernetes.pods.targets
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          action        = "replace"
+          target_label  = "namespace"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          action        = "replace"
+          target_label  = "pod"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          action        = "replace"
+          target_label  = "container"
+        }
+      }
+
+      // --- C. READ THE LOG FILES ---
+      loki.source.kubernetes "pods" {
+        targets    = discovery.relabel.pod_logs.output
+        forward_to = [loki.write.loki_gateway.receiver]
+      }
+
+      // --- D. SEND TO LOKI GATEWAY ---
+      loki.write "loki_gateway" {
+        endpoint {
+          url = "https://loki.unixworld.io/loki/api/v1/push"
+          tenant_id = "tenant1"
+
+          basic_auth {
+            username = "loki"
+            password = local.file.loki_password.content
+          }
+        }
+      }
+
+  mounts:
+    extra:
+      - name: loki-auth-volume
+        mountPath: "/etc/secrets/loki"
+        readOnly: true
+
+controller:
+  volumes:
+    extra:
+      - name: loki-auth-volume
+        secret:
+          secretName: "loki-auth"
+
+rbac:
+  create: true
